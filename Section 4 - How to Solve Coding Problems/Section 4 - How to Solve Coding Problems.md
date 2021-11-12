@@ -63,7 +63,7 @@ While there are many more data structures and algorithms, we will only focus on 
 
 ### Google Interview - How to: Work at Google — Example Coding/Engineering Interview
 
-**INTERVIEWER:** I'm giving you a colelction of numbers, and you need to find a matching pair of numbers which is equal to a sum that I will also give you. For example:
+**INTERVIEWER:** I'm giving you a collection of numbers, and you need to find a matching pair of numbers which is equal to a sum that I will also give you. For example:
 ```ts
 [1,2,3,9]  Sum = 8
 [1,2,4,4]  Sum = 8
@@ -339,3 +339,5 @@ The merging would be a little bit tricky, because we want to make sure that we d
 **4. Test it:** Test your solution in real time. Use the examples given by the interviwer or even make up one up if you don't have it. And test it out loud for your interviwer as well.
 
 **5. Think about edge cases:** This are really important. In this example, the candidate thought of what happened if he had an empty collection of numbers, and he also tested what would happen with this solution for that edge case.
+
+
