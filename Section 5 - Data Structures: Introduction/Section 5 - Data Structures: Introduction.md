@@ -102,6 +102,8 @@ Our goal is to minimize the operation that we need to do for the CPU to get the 
 
 That's why data structures are so powerful: we're thinking about the low level of how a computer works.
 
+TODO: Watch and unrecord: https://www.youtube.com/watch?v=fpnE6UAfbtU&ab_channel=CrashCourse
+
 ## Data Structures in Different Languages
 
 While there are a number of data structures that you might be asked in an interview, the list isn't actually that intimidating. You only need to learn the one in the following list:
