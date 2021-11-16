@@ -184,6 +184,7 @@ Create a function that reverses a string it gets as an input.
 
 My solution:
 ```js
+// Javascript
 function reverseString(str) {
   const splitString = str.split("");
   return splitString.reverse().join("");
@@ -205,6 +206,7 @@ print(reverseString("hello"))
 ## Solution: Reverse a string
 
 ```js
+// Javascript
 function reverseString(str) {
   // First check inputs
   if(!str || typeof str !== "string") {
@@ -218,4 +220,117 @@ function reverseString(str) {
   }
   return backwards.join("");
 }
+```
+
+## Excercise: Merge Sorted Arrays
+
+```js
+// Javascript
+// Only two arrays
+const mergeSortedArrays = (arr1, arr2) => {
+ return [...args].sort();
+}
+// Time complexity: O(n log N)
+
+// Infinite number of arrays
+const mergeSortedArrays = (...args) => {
+  return args.reduce((acc, current) => [...acc, ...current])
+}
+// Time complexity: O(n log N)
+```
+
+## Solution: Merge Sorted Arrays
+```js
+// Javascript
+// Time Complexity: O(N+M)
+const mergeSortedArrays = (arr1, arr2) => {
+  if(arr1.length === 0) {
+    return arr2;
+  }
+  if(arr2.length === 0) {
+    return arr1;
+  }
+
+  const mergedArray = [];
+  let [pointer1, pointer2] = [0, 0];
+  while(arr1[pointer1] || arr2[pointer2]) {
+    if(!arr1[pointer1]) {
+      mergedArray.push(arr2[pointer2]);
+      pointer2++;
+    } else if(!arr2[pointer2]) {
+      mergedArray.push(arr1[pointer1]);
+      pointer1++;
+    } else if(arr1[pointer1] <= arr2[pointer2]) {
+      mergedArray.push(arr1[pointer1]);
+      pointer1++;
+    } else {
+      mergedArray.push(arr2[pointer2]);
+      pointer2++;
+    }
+  }
+
+  return mergedArray;
+}
+
+const mergeSortedArrays = (arr1, arr2) => {
+  const mergedArray = [];
+  const n1 = arr1.length;
+  const n2 = arr2.length;
+  let i = 0;
+  let j = 0;
+
+  // Loop through both arrays while both have numbers
+  while(i < n1 && j < n2) {
+    if(arr1[i] <= arr2[j]) {
+      mergedArray.push(arr1[i]);
+      i++;
+    } else {
+      mergedArray.push(arr2[j]);
+      j++
+    }
+  }
+
+  // Complete remaining from arr1 when arr2 is over
+  while(i < n1) {
+    mergedArray.push(arr1[i]);
+    i++;
+  }
+
+  // Complete remaining from arr2 when arr1 is over
+  while(j < n2) {
+    mergedArray.push(arr2[j]);
+    j++;
+  }
+
+  return mergedArray;
+}
+```
+
+```python
+# Python
+# Time Complexity: O(N+M)
+def mergeSortedArrays(arr1, arr2):
+  mergedArray = []
+  n1 = len(arr1)
+  n2 = len(arr2)
+  i = 0
+  j = 0
+
+  while i < n1 and j < n2:
+    if arr1[i] < arr2[j]:
+      mergedArray.append(arr1[i])
+      i = i + 1
+    else: 
+      mergedArray.append(arr2[j])
+      j = j + 1
+
+  while i < n1:
+      mergedArray.append(arr1[i])
+      i = i + 1
+  
+  while j < n2:
+      mergedArray.append(arr2[j])
+      j = j + 1
+  
+  return mergedArray
 ```
