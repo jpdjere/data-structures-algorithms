@@ -354,3 +354,276 @@ class Solution:
     for i in range(len(other), len(nums)):
         nums[i] = 0
 ```
+
+### Rotate Array (Medium)
+
+Given an array, rotate the array to the right by k steps, where k is non-negative.
+
+Example 1:
+```
+Input: nums = [1,2,3,4,5,6,7], k = 3
+Output: [5,6,7,1,2,3,4]
+```
+Explanation:
+rotate 1 steps to the right: [7,1,2,3,4,5,6]
+rotate 2 steps to the right: [6,7,1,2,3,4,5]
+rotate 3 steps to the right: [5,6,7,1,2,3,4]
+
+Example 2:
+```
+Input: nums = [-1,-100,3,99], k = 2
+Output: [3,99,-1,-100]
+```
+
+Explanation: 
+
+rotate 1 steps to the right: [99,-1,-100,3]
+rotate 2 steps to the right: [3,99,-1,-100]
+ 
+
+Constraints:
+```
+1 <= nums.length <= 105
+-231 <= nums[i] <= 231 - 1
+0 <= k <= 105
+```
+
+### Rotate Array (Medium) - Solution
+
+```python
+# Time Complexity: O(N)
+# Space Complexity: O(N)
+class Solution:
+    def rotate(self, nums: List[int], k: int) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        length = len(nums)
+        # Correct k if it is greater than length of array
+        if k > length:
+            k = k - length
+        beforeK = nums[0:length-k]
+        afterK = nums[length-k:length]
+        newArray = afterK + beforeK
+        for i in range(0, length):
+            nums[i] = newArray[i]
+```
+
+Follow up:
+
+- Try to come up with as many solutions as you can. There are at least three different ways to solve this problem.
+- Could you do it in-place with O(1) extra space?
+
+## Continer with Most Water
+
+You are given an array of positive integers where each itneger represents the height of a vertical line on a chart. Find two lines which together with the x-axis formas a container that would hold the greatest amount of water. Return the area of water it would hold.
+
+![](2021-11-23-08-24-15.png)
+
+As you can see from the graph, we would need to return the are of the container held between the lines with height 8 and 9 (but only using height 8).
+
+height = 8
+width = 3
+
+area = height x width = 8 x 3 = 24
+
+### Step 1 : Verify the constraints?
+
+**Does the thicknes of the liens affect the area?**
+
+No, assume they take up no space.
+
+**Do the left and right sides of the graph count as walls?**
+
+No, the sides canot be used to form a container.
+
+**Does a higher line inside our container affect our area?**
+
+No, lines iside a container don't affect the area.
+
+![](2021-11-23-08-27-12.png)
+
+### Step 2: Coming up with test cases
+
+1) If we get an array:
+
+```
+ ⬇           ⬇ 
+[ 7, 1, 2, 3, 9]
+  0  1  2  3  4
+```
+Then we know the biggest area is formed by the 7 and 9, with a height of 9 and a width that is **the difference between the indexes for the border of the container**, (in this case, 7 and 9, with indeces 0 and 4).
+
+area = height * width = min(7, 9) * (index 1 - index 0) = 7 * (4 - 0) = 28
+
+2) If we get an empty array or an array with a single value, no area can be formed, so the answer will be 0.
+```
+[] -> area = 0
+[5] -> area = 0
+```
+
+### Step 3: Thinking through a logical brute force solution
+
+This is a maximum-value question. This means that finding an area of water that can be hold doesn't mean that it is the greatest amount of water. So the only way to know if it is the greatest area (or smallest, depending on the question) we'd have to calculate all areas and then return the max area.
+
+Let's take the first input:
+```
+[ 7, 1, 2, 3, 9]
+  0  1  2  3  4
+```
+And using our formula:
+```
+area = height * width = min(a, b) x (bi - ai)
+```
+
+We can calculate the area for all pairs within the input, store the maximum area and update it when we find a higher value. This brute force soltuon will have a O(N^2) time complexity.
+
+
+### Coding our Brute Force Solution
+
+```python
+# Time Complexity: O(N^2)
+# Space Complexity: O(1)
+def containerWithGreatestArea(arr):
+  length = len(arr)
+  maxArea = 0
+  if length == 0 or length == 1:
+    return 0
+
+  for i in range(0, length):
+    for j in range(i + 1, length):
+      newArea = min(arr[i], arr[j]) * (j - i)
+      if newArea > maxArea:
+          maxArea = newArea
+  
+  return maxArea
+```
+```js
+const containerWithGreatestArea = (arr) => {
+  const len = arr.length;
+  let maxArea = 0;
+  if(len === 0 || len === 1) {
+    return 0
+  }
+
+  for(let i = 0; i < len; i++) {
+    for(let j = i + 1; j < len; j++) {
+      const newArea = Math.min(arr[i], arr[j]) * (j - i)
+      maxArea = Math.max(newArea, maxArea)
+    }
+  }
+
+  return maxArea;
+}
+```
+
+### Step 5: Thinking about our Optimal Solution
+
+Notice that, having Time Complexity: O(N^2) -thanks to our nested for loop- and Space Complexity: O(1), we could sacrifice a little more space to achieve a better time performance, like we did in the findSum excercise of the Google interview.
+
+So, if we wanted to look for a similar solution, we'd need to udnerstand what are we doing on our curent solution. So what are we doing?
+
+First, we are storing the max area that we find so far, for every area that we calculate for i and j. That means that the double for-loop does not separate: we need i and j together in order to figure out the area, so there is no additional step within the for-loops, which means there is no additional cacheing we can do for i (the first index or for loop).
+
+And what about the second for loop? Is there some way we can improve or even eliminate the second for-loop using more memory? The answer is no: we are just using memory to store the new calculated area, then comparing it to our max area, and then we just throw it away. So the improvement of using a hashmap, like in the findSum excercise, won't help us here.
+
+What we actually need to use is the **shifting pointers technique**.
+
+Instead of starting with `i` and `j` at positions 0 and 1, let's replace them with `a` and `b`, and place them at the start and end of the array, and let's re-write our formula for area:
+
+![](2021-11-23-09-21-47.png)
+
+In the findSum excercise, the distance between the pointers doesn't matter, it doesn't affect the end result: as soon as we find a pair that sums to our target we can return it. If those numbers are located at a distance of 1 index or 10 indeces doesn't modify the check to do if they are a valid answer for the excercise (which is only summing them up).
+
+However, in our current question, the width (distance between `a` and `b`) has a direct impact on the actual area, therefore, on the solution to our problem.
+
+We don't know, however, whether **increasing** or **decreasing** the distance between `a` and `b` will our area increase or decrease (it can have both effects).
+
+Let's take a look:
+```
+ 0  1  2  3  4  5
+[4, 8, 1, 2, 3, 9]           area = min(a, b) x (bi - ai)
+ a              b                 = min(4, 9) x (5  -  0) =   4 x 5 = 20
+
+
+ 0  1  2  3  4  5
+[4, 8, 1, 2, 3, 9]           area = min(a, b) x (bi - ai)
+    a           b                 = min(8, 9) x (5  -  1) =   8 x 4 = 32 
+```
+
+From the above example, we see that shrinking our width resulted in a greater area. But if we think what really happened  we can realize that **the total area is impacted by the lesser or smaller of the values of `a` and `b`**. 
+
+We saw that shrinking the distance between `a` and `b` we ended up with a smaller area: this tells us that **the only value in the height part of the equation that has some impact on the outcome of the area equation is the smaller value.** Why? Because by taking the `min` of `a` and `b` the larger value is virtually ignored (has no impact at all in the calculation). And because the distance between `a` and `b` (the width part of the equation) can increase **or** decreasing depending on each case -there's no guaranteed change towards a greater or smaller area- we know that the key is making the smaller of `a` and `b` larger on each step.
+
+As a counter-proof, let's see an example of what happens if we decided to modify the **largest** of our `a` and `b` values:
+
+First, let's see what happens when `b`, our largest, **gets bigger**. In this case, `b` turns from a 9 to a 12.
+```
+ 0  1  2  3  4  5
+[4, 8, 1, 2, 12, 9]           area = min(a, b) x (bi - ai)
+ a               b                 = min(4, 9) x (5  -  0)
+                                   =      4    x     5       = 20
+
+
+ 0  1  2  3  4  5
+[4, 8, 1, 2, 12, 9]           area = min(a, b) x (bi - ai)
+ a            b                    = min(4, 12) x (5  -  1)
+                                   =      4     x     4      = 16
+```
+
+As you can see, even if the bigger value gets bigger, it doesn't have any impact on the total area, because the `min` operation "neutralizes" that change, and the height is still 4 (while the width got reduced).
+
+Now, let's see what happens when `b`, our largest, **gets smaller**. In this case, `b` turns from a 9 to a 3 (our original example):
+
+```
+ 0  1  2  3  4  5
+[4, 8, 1, 2, 3, 9]           area = min(a, b) x (bi - ai)
+ a              b                 = min(4, 9) x (5  -  0)
+                                   =      4    x     5       = 20
+
+
+ 0  1  2  3  4  5
+[4, 8, 1, 2, 3, 9]           area = min(a, b) x (bi - ai)
+ a           b                    = min(4, 3) x (5  -  1)
+                                   =      3     x     4      = 12
+```
+
+In this case, it did have an effect, but in this case particulary, reducing the total area because the new `b` is 3 and that reduced the height to a 3. Even if our new `b` had beed reduced, but still greater than our `a`, for example, reduced to 6, then the minimum between `a` and `b`, that is 4 and 6, would still be 4. That would mean a total area of 4 x 4 or 16, which is still a reduction from 20.
+
+So now we can conclude that the only thing that matters is **moving the smaller of `a` and `b` forward** when updating our pointers, as that is the only way we can attempt to get a larger area as in the previous step. That is the key for this algorithm.
+
+Therefore, we will start our shifting pointers at the extremes of our array (as we want to calculate for our maximum possible width), and then start shifting our pointer that has the smaller value on each step.
+
+By going through the array once, with our shifting poitners, we can guarantee a time complexity of O(N), or linear.
+
+But the key with **shifting pointers** is realizing **when and how they should be updated** which will be different in every excercise.
+
+So to sum up, in this case, each update step was: "Shrink our width on each step, but the decision on wether to shrink from the left or from the right is based on wether `a` (left) or `b` (right) is smaller. For each step, we move inwards whichever of `a` and `b` is smaller."
+
+### Step 6: Coding our Optimal Solution
+
+```python
+# Time Complexity: O(N)
+def containerWithGreatestArea(arr):
+  length = len(arr)
+  # Early return for edge cases
+  if length == 0 or length == 1:
+    return 0
+
+  # Define my pointers and initial maxArea
+  a = 0
+  b = length - 1
+  maxArea = 0
+
+  # Loop while the pointers don't overlap
+  while a != b:
+    newArea = min(arr[a], arr[b]) * (b - a)
+    maxArea = max(maxArea, newArea)
+    # Conditionally update the pointers
+    if arr[a] > arr[b]:
+      b = b + 1
+    else:
+      a = a + 1
+  
+  return maxArea
+```
