@@ -621,9 +621,224 @@ def containerWithGreatestArea(arr):
     maxArea = max(maxArea, newArea)
     # Conditionally update the pointers
     if arr[a] > arr[b]:
-      b = b + 1
+      b = b - 1
     else:
       a = a + 1
   
   return maxArea
+```
+
+
+## Trapping Rainwater
+
+Given an array of integers representing an elevation map where the width of each bar is 1, return how much rainwater can be trapped.
+
+![](2021-11-26-08-24-58.png)
+
+### Step 1: Verify the Constraints
+
+Do the left and right sides of the graph count as walls?
+
+No, the sides are not walls.
+
+Will there be negative integers?
+
+No, assume all positive integers.
+
+### Step 2: Test Cases
+
+```
+[0, 1, 0, 2, 1, 0, 3, 1, 0, 1, 2] -> 8
+
+[] -> 0
+
+[3] -> 0
+
+[3, 4, 3] -> 0
+```
+
+### Step 3: Figure out a solution without code
+
+By looking at a diagram, we can deduct that, the amount of water trapped at each element can be calculated by the following formula:
+```
+amount of water at i = min(maxLeft, maxRight) - value at i
+```
+where:
+- maxLeft: maximum value of the array to the left of i
+- maxRight: maximum value of the array to the right of i
+
+So we can loop through our array and do this calculation for each element, summing up the water that can be held at each element:
+
+```python
+# Time Complexity: O(N^2)
+def trappingRainwater(heights):
+
+  # Variable to store trapped water
+  water = 0
+  for i in range(0, len(height)):
+      # Get array to the left of current element and find max
+      left = height[0:i]
+      maxLeft = max(left) if len(left) > 0 else 0
+
+      # Get array to the right of current element and find max
+      right = height[i+1:len(height)]
+      maxRight = max(right) if len(right) > 0 else 0
+
+      #Calculate the waterColumn at that element and sum only if positive
+      waterColumn = min(maxLeft, maxRight) - height[i]
+      if waterColumn > 0:
+          water = water + waterColumn
+  return water
+```
+
+This solution, however, has a quadratic time complexity, which is not ideal. This time complexity comes from the fact that we loop for all elements, and for each element we use max, which itself has a linear time complexity.
+
+Let's try to find a way in which we can get down our time complexity to O(N).
+## Optimal solution
+
+Let's think of a solution that uses the **shifting pointers technique**, like in the previous problem. In that case, we had two pointers starting at the edges of the array and moving inwards.
+
+In order to do the same in this problem, we need to find the rationale to know when to move the pointers inwards at each step.
+
+What are the two things about the pointers that we have to realize?
+
+1. We need one pointer starting at each extreme of the array, and we need to move them conditionally inwards on each step. At each iteration -each pair of pointers- we should have access to the values provided by the pointers.
+2. We also need to know the values that we have seen before with each pointer.
+
+We can think of the process of finding the trapped water in the whole array as follows: we loop through the array with one pointer. On each element, this pointer "sends" an additional pointer to the left, and an additional pointer to the right, in order to find the two walls that form the container for each element.
+
+How can we apply this knowledge to our two pointers?
+
+![](2021-11-26-13-18-30.png)
+
+Having the two pointers at the extremes, with data to know if we have a wall in each, what can we derive using them?
+
+Technically, we can't figure anything out, because, when we have our pointers placed so, we know nothing about the content inside the walls formed by those two pointers. The water content can be affected by any other walls inside the container. So we cannot use the poitners to single-handedly figure out how much water would be trapped inside of the walls formed by them.
+
+What we can keep track of are **the maximum values that they have seen respectively for each side**. So as `maxLeft` moves inward we keep track of the maximum value it has seen, and the same with `maxRight` as it moves inwards also.
+
+But what do we do with those max values? How do we decide which one to move?
+
+We also know that we had a similar approach using these two pointers, in which we moved inward the pointer of the smallest wall (or value) because it was the only one that had a chance of making the amount of water that was being stored bigger.
+
+We are going to follow the same logic in this question, but it's going to go a step further. The 
+reason why we want to move pointer that has the smaller value is because, when looking at the equation
+
+```
+currentWater = min(maxLeft, maxRight) - currentHeight
+```
+
+we know that it is calculating for some current value which before we represented with some pointer (the i with which we looped through the array in the brute force solution). Now that we don't have that looping pointer any more, we need to have one of the two pointers (which we placed at the extremes) to take the responsability of measuring the currentWater where it is positioned.
+
+We need to get these two ideas together: firstly, our logic still says that we have to moved the pointer with the smaller value inwards, while at the same time we need to use the smaller value as the actual current height to do the calculation. (we'll see why once we step into the logic)
+
+Let's first initialize a `maxLeft` and a `maxRight` variables with value `0`.
+
+![](2021-11-26-13-52-27.png)
+
+In the example above, with the pointers set positions `0` and `len(heights) - 1`, which of those elements have a smaller value? The value at position `0` is `0` and is smaller than the value at the last element, which is `2`. So the first element is the smaller value, and that's the one we need to start operating on. 
+
+But now we have to decide: **do we try to calculate the amount of water for this value, or do we try to update our maxLeft?**
+
+The reason why we need to decide this is because, in order to calculate the water for that element and value, we need to have a `maxLeft` that is bigger than our current value: our current element **can only have water trapped above it if some wall to the left of it is actually greater than itself.**
+
+This logic is not exactly the same for the right side because we knew that this right value (of the right pointer) was bigger than the value of the left pointer. That means that we know that the right value (wherever it is) can be a wall to our left pointer, simply because it is larger than the value of our left pointer.
+
+But we don't know yet if there is a wall on the left side of our current element yet, and the only way we can figure out if there is one is to compare our current value to our `maxLeft` value, which keeps the values of the max heights that we have seen to the left.
+
+In the first iteration, we see that our current value of `0` is not bigger than our value of `maxValue` which is also `0`. So all we do is update our `maxLeft` (in this case stays at 0 anyways because the new max is also 0), and we move the left pointer inwards .
+
+![](2021-11-26-14-07-50.png)
+
+Now, with the pointers at the new position, between `heights[a] = 1` and `heights[b] = 2`, which one is smaller? `a`, our left pointer, points to a smaller value, so we will use that one to operate. 
+
+Now, the second question: do we calculate how much water is trapped on our current position? We know that this position has a right wall (because of the check we did in the immediately previous step, the value of `heights[b]` is higher than `heights[a]`), but do we have a left wall? To know that, we can check if our `maxLeft` is greater than our current value. In this case `maxLeft` is smaller than our current value (0 vs 1), so we know we don't have a left wall.
+
+So we update our `maxLeft` to our new max value of `1` and move our left pointer `a` inwards again.
+
+![](2021-11-26-14-15-00.png)
+
+And we start the check again. Which of `heights[a]` and `heights[b]` has the smaller value? `heights[a]` still is smaller with 0 vs 2. So we operate on that one.
+
+Now we look if we have a wall to our left, so we can decide if we should calculate the trapped water. In this case, `maxLeft` of 1 is greater than our current value of 0, so we should do the calculation with our formula:
+
+```
+currentWater = min(maxLeft, maxRight) - currentHeight
+```
+
+Notice that we already know that our `maxLeft` is smaller than our `maxRight`, because, as long as we keep moving the pointer with the smallest value inwards, we are always working with the smaller of `maxLeft` and `maxRight` (because in order for that pointer to be moving, any value that we have iterated through must be smaller than the other side. That's why can spare the calculation of the minimum between the two, and just substract (in this case) `maxLeft` minus our `currentHeight`
+
+```
+currentWater = maxLeft - currentHeight
+                  1    -      0         =   1
+```
+
+Then we move the pointer inwards (while `maxLeft` doesn't get updated because its previous value if greater than our current value).
+
+![](2021-11-26-14-24-56.png)
+
+In the case in which `heights[a]` and `heights[b]` are equal, we can just decide with which to operate, it will make no difference. We'll continue operating with, and moving pointer `a`.
+
+So do we calculate the water? `maxLeft` is 1 and is smaller than the current value of 2, so we don't calculate the water. Instead, since our current value is larger than `maxLeft`, we updated `maxLeft` to be our current value of 2.
+
+And we continue doing this calculation until our pointers `a` and `b` overlap.
+## Coding our Optimal Solution
+https://leetcode.com/problems/trapping-rain-water/submissions/
+
+```python
+# Time Complexity: O(N)
+def trappingRainwater(heights):
+  maxLeft = maxRight = accumulatedWater = 0
+  a = 0
+  b = len(heights) - 1
+
+  while a != b:
+    # If the value at pointer a is less than the value at pointer b
+    # we operate with a, otherwise we operate with b
+    if heights[a] <= heights[b]:
+      # If we have a wall to our left (i.e. our maxLeft 
+      # is greater than our current value) calculate water
+      if maxLeft > heights[a]:
+        accumulatedWater += (maxLeft - heights[a])
+      else:
+        # Otherwise, update our current maxLeft
+        maxLeft = heights[a]
+      # Once that is done, move pointer inwards
+      a = a + 1
+    # If the value at pointer b is less than the value at pointer a 
+    else:
+      if maxRight > heights[b]:
+        accumulatedWater += (maxRight - heights[b])
+      else:
+        maxRight = heights[b]
+      b = b - 1
+  
+  return accumulatedWater
+```
+No comments version:
+```python
+# Time Complexity: O(N)
+def trappingRainwater(heights):
+  maxLeft = maxRight = accumulatedWater = 0
+  a = 0
+  b = len(heights) - 1
+
+  while a != b:
+
+    if heights[a] <= heights[b]:
+      if maxLeft > heights[a]:
+        accumulatedWater += (maxLeft - heights[a])
+      else:
+        maxLeft = heights[a]
+
+      a = a + 1
+
+    else:
+      if maxRight > heights[b]:
+        accumulatedWater += (maxRight - heights[b])
+      else:
+        maxRight = heights[b]
+      b = b - 1
+  
+  return accumulatedWater
 ```
