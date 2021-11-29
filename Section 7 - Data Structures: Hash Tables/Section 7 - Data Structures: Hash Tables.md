@@ -138,3 +138,30 @@ class HashTable {
 }
 ```
 
+## Hash Tables vs. Arrays
+
+![](2021-11-26-18-59-41.png)
+
+Notice the difference of **searching being O(1) in hash tables**. That's why it's a data structure so often found in databases.
+
+**Insert and Delete** are also O(N).
+
+## Excercise: First Recurring Character
+
+Given an array:
+
+```
+array = [2, 5, 1, 2, 3, 5, 1, 2, 4];
+```
+
+Find the first recurring character. The above array should return 2.
+
+```python
+def findFirstRecurring(nums):
+  seen = {}
+  for val in nums:
+    if val in seen:
+      return val
+    seen[val] = 1
+  return None
+```
