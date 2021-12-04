@@ -388,3 +388,444 @@ list.prepend(-1);
 console.log(list.printList())
 list.insert(0, 999)
 ```
+
+```python
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+
+class LinkedList:
+  def __init__(self, node):
+    self.head = node
+    self.tail = node
+    self.length = 1
+  
+  def __repr__(self):
+      node = self.head
+      nodes = []
+      while node is not None:
+          nodes.append(node.data)
+          node = node.next
+      nodes.append("None")
+      return " -> ".join(nodes)
+
+  def append(self, newNode):
+    self.tail.next = newNode
+    self.tail = newNode
+    self.length = self.length + 1
+    return self
+
+  def prepend(self, newNode):
+    newNode.next = self.head
+    self.head = newNode
+    self.length = self.length + 1
+    return self
+
+  # This is a traverse helper function
+  # that we will use in insert and remove
+  def traverse(self, index):
+    counter = 0
+    returnNode = self.head
+    while counter != index:
+      returnNode = returnNode.next
+      counter = counter + 1
+    return returnNode
+
+  def insert(self, index, newNode):
+    # If index passed is larger or equal to length
+    # return an out of bounds error
+    if(index >= self.length):
+      return "Index "+str(index)+" out of bounds"
+    # Edge case when index is 0, just prepend newNode
+    if(index == 0):
+      self.prepend(newNode)
+    leadNode = self.traverse(index - 1)
+    newNode.next = leadNode.next
+    leadNode.next = newNode
+    self.length += 1
+    return self
+
+llist = LinkedList(Node("a")).append(Node("b")).prepend(Node("z")).insert(2, Node("55")) # z -> a -> 55 -> b -> None
+print(llist)
+```
+
+## Adding remove()
+
+```js
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+class LinkedLink {
+  constructor(value) {
+    this.head = new Node(value);
+    this.tail = this.head;
+    this.length = 1;
+  }
+
+  append(value) {
+    let newNode = new Node(value);
+    this.tail.next = newNode;
+    this.tail = newNode;
+    this.length++;
+    return this;
+  }
+
+  prepend(value) {
+    let newNode = new Node(value);
+    newNode.next = this.head;
+    this.head = newNode;
+    this.length++;
+    return this;
+  }
+
+  printList() {
+    const array = [];
+    let currentNode = this.head;
+    while(currentNode !== null) {
+      array.push(currentNode.value);
+      currentNode = currentNode.next;
+    }
+    return array.join(" --> ");
+  }
+
+  insert(index, value) {
+    if(index > this.length) {
+      return "Error: New index out of bounds."
+    }
+    if(index === 0) {
+      this.prepend(value);
+      return this.printList();
+    }
+    let currentNode = this.head;
+    for(let currentIndex = 0; currentIndex < index - 1; currentIndex++) {
+      currentNode = currentNode.next;
+    }
+    const newNode = new Node(value);
+    newNode.next = currentNode.next;
+    currentNode.next = newNode;
+    return this.printList();
+  }
+
+  remove(index) {
+    if(index > this.length) {
+      return "Error: New index out of bounds."
+    }
+    if(index === 0) {
+      this.head = this.head.next;
+      this.length--;
+      return this.printList();
+    }
+
+    let currentNode = this.head;
+    for(let currentIndex = 0; currentIndex < index - 1; currentIndex++) {
+      currentNode = currentNode.next;
+    }
+    let nodeToDelete = currentNode.next;
+    currentNode.next = nodeToDelete.next;
+    this.length--;
+    return this.printList();
+  }
+}
+
+const list = new LinkedLink(5).append(3);
+list.append(6);
+list.append(99);
+list.prepend(-1);
+console.log(list.printList())
+list.insert(0, 999)
+```
+
+```python
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+  
+  def __repr__(self):
+    return str(self.data) + " " + str(self.next)
+
+class LinkedList:
+  def __init__(self, node):
+    self.head = node
+    self.tail = node
+    self.length = 1
+  
+  def __repr__(self):
+      node = self.head
+      nodes = []
+      while node is not None:
+          nodes.append(node.data)
+          node = node.next
+      nodes.append("None")
+      return " -> ".join(nodes)
+
+  def append(self, newNode):
+    self.tail.next = newNode
+    self.tail = newNode
+    self.length = self.length + 1
+    return self
+
+  def prepend(self, newNode):
+    newNode.next = self.head
+    self.head = newNode
+    self.length = self.length + 1
+    return self
+
+  def traverse(self, index):
+    counter = 0
+    returnNode = self.head
+    while counter != index:
+      returnNode = returnNode.next
+      counter = counter + 1
+    return returnNode
+
+  def insert(self, index, newNode):
+    # If index passed is larger or equal to length
+    # return an out of bounds error
+    if(index >= self.length):
+      return "Index "+str(index)+" out of bounds"
+    # Edge case when index is 0, just prepend newNode
+    if(index == 0):
+      self.prepend(newNode)
+    leadNode = self.traverse(index - 1)
+    newNode.next = leadNode.next
+    leadNode.next = newNode
+    self.length += 1
+    return self
+
+  def remove(self, index):
+    # If index passed is larger or equal to length
+    # return an out of bounds error
+    if(index >= self.length):
+      return "Index "+str(index)+" out of bounds"
+    # Edge case when index is 0, just update the head
+    if(index == 0):
+      self.head = self.head.next
+      self.length -= 1
+      return self
+    leadNode = self.traverse(index - 1)
+    leadNode.next = leadNode.next.next
+    self.length -= 1
+    return self
+
+llist = LinkedList(Node("a")).append(Node("b")).prepend(Node("z")).insert(2, Node("55")).remove(2).remove(3)
+ # z -> a -> 55 -> b -> None
+print(llist)
+print(llist.length)
+
+```
+
+
+
+## Doubly Linked Lists
+
+A doubly linked list is similar to a singly linked list except that each node also links to the node before it.
+
+![](2021-12-03-08-19-08.png)
+
+A doubly linked list allows us to transverse our list backwards, i.e. from the end to the direction of the beginning. In a singly linked list, there is no way for me to know what node comes before a particular node.
+
+So lookup or searching can technically be a little more efficient in a doubly linked list: it can be O(N/2) because we can start from any of the extremes.
+
+The only downside is that we will have to use more memory to store the references to the previous node, for each node.
+
+```js
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+    this.prev = null; // This is new
+  }
+}
+class DoublyLinkedLink {
+  constructor(value) {
+    this.head = new Node(value);
+    this.tail = this.head;
+    this.length = 1;
+  }
+
+  append(value) {
+    let newNode = new Node(value);
+    newNode.prev = this.tail; // This is new
+    this.tail.next = newNode;
+    this.tail = newNode;
+    this.length++;
+    return this;
+  }
+
+  prepend(value) {
+    let newNode = new Node(value);
+    this.head.prev = newNode; // This is new
+    newNode.next = this.head;
+    this.head = newNode;
+    this.length++;
+    return this;
+  }
+
+  printList() {
+    const array = [];
+    let currentNode = this.head;
+    while(currentNode !== null) {
+      array.push(currentNode.value);
+      currentNode = currentNode.next;
+    }
+    return array.join(" <--> "); // Updated
+  }
+
+  insert(index, value) {
+    if(index > this.length) {
+      return "Error: New index out of bounds."
+    }
+    if(index === 0) {
+      this.prepend(value);
+      return this.printList();
+    }
+    let currentNode = this.head;
+    for(let currentIndex = 0; currentIndex < index - 1; currentIndex++) {
+      currentNode = currentNode.next;
+    }
+    const newNode = new Node(value);
+    const posterior = currentNode.next;
+    newNode.next = posterior; // This is updated
+    posterior.prev = newNode; // This is new
+    newNode.prev = currentNode; // This is new
+    currentNode.next = newNode;
+    return this.printList();
+  }
+
+  remove(index) {
+    if(index > this.length) {
+      return "Error: New index out of bounds."
+    }
+    if(index === 0) {
+      this.head = this.head.next;
+      this.head.prev = null;
+      this.length--;
+      return this.printList();
+    }
+
+    if(index === this.length - 1) {
+      this.tail = this.tail.prev;
+      this.tail.next = null;
+      this.length--;
+      console.log(list)
+      return this.printList();
+    }
+
+    let currentNode = this.head;
+    for(let currentIndex = 0; currentIndex < index - 1; currentIndex++) {
+      currentNode = currentNode.next;
+    }
+    const nodeToDelete = currentNode.next;
+    const newNext = nodeToDelete.next;
+    currentNode.next = newNext;
+    newNext.prev = currentNode;
+    this.length--;
+    return this.printList();
+  }
+}
+```
+
+## Singly vs Doubly Linked List
+
+When to use each?
+
+The pros of a singly linked list:
+- it is a fairly simple implementation (especially compared to doubly linked)
+- requires less memory
+- a bit faster because less operations per data structure operation
+
+Cons of a singly linked list:
+- Cannot be iterated in reverse.
+
+So use when:
+- memory is a limiting factor
+- main goal is fast insertion and deletion (and no a lot of searching)
+
+The pros of a doubly linked list:
+- It can be iterated from the front or from the back.
+- If you need to delete a previous node, you don't need to iterate from the head node all the way to it, you already have the reference from the current node.
+
+Cons of doubly linked list:
+- More complex to implement.
+- Requires more memory than a singly linked list.
+- Requires more operation per DS operation (so also a little slower).
+
+## Implementing reverse()
+
+Reversing a **singly linked list**:
+
+```js
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+class LinkedLink {
+  constructor(value) {
+    this.head = new Node(value);
+    this.tail = this.head;
+    this.length = 1;
+  }
+
+  append(value) {
+    let newNode = new Node(value);
+    this.tail.next = newNode;
+    this.tail = newNode;
+    this.length++;
+    return this;
+  }
+
+  prepend(value) {
+    let newNode = new Node(value);
+    newNode.next = this.head;
+    this.head = newNode;
+    this.length++;
+    return this;
+  }
+
+  printList() {
+    const array = [];
+    let currentNode = this.head;
+    while(currentNode !== null) {
+      array.push(currentNode.value);
+      currentNode = currentNode.next;
+    }
+    return array.join(" --> ");
+  }
+
+  reverse() {
+    if(this.length <= 1) {
+      return this.printList();
+    }
+    // Take first and second nodes
+    const first = this.head;
+    const second = first.next;
+
+    // Update the tail to be our current head
+    this.tail = first;
+
+    // Loop until we reach the end
+    while(second) {
+      // Take auxiliary the following to second
+      const followSecond = second.next;
+      // Update the next to second to be our first
+      second.next = first;
+      // Invert first and second
+      first = second
+      second = followSecond
+    }
+    // After finishing looping, remove the reference
+    // of our original head to a next
+    this.head.next = null;
+    // Set an updated head
+    this.head = first;
+    return this.printList();
+  }
+```
+
