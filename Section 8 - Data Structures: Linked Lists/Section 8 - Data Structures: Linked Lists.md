@@ -85,6 +85,7 @@ In other non-garbage collected languages you would have to do this garbage colle
 
 Let's create our first linked list with the shape: `10 --> 5 --> 16`.
 
+### Javascript
 ```js
 let myLinkedList = {
   head: {
@@ -113,6 +114,7 @@ class LinkedLink {
 const myLinkedList = new LinkedList(10);
 ```
 
+### Python
 ```python
 class Node:
   def __init__(self, data):
@@ -140,6 +142,7 @@ print(llist)
 
 ## Adding append()
 
+### Javascript
 ```js
 class LinkedLink {
   constructor(value) {
@@ -169,6 +172,7 @@ list.append(99);
 console.log(JSON.stringify(list))
 ```
 
+### Python
 ```python
 class Node:
   def __init__(self, data):
@@ -202,6 +206,7 @@ print(llist)
 
 ## Adding prepend()
 
+### Javascript
 ```js
 class LinkedLink {
   constructor(value) {
@@ -242,6 +247,7 @@ list.prepend(-1);
 console.log(JSON.stringify(list))
 ```
 
+### Python
 ```python
 class Node:
   def __init__(self, data):
@@ -322,6 +328,7 @@ console.log(JSON.stringify(list))
 
 ## Adding insert()
 
+### Javascript
 ```js
 class Node {
   constructor(value) {
@@ -389,6 +396,7 @@ console.log(list.printList())
 list.insert(0, 999)
 ```
 
+### Python
 ```python
 class Node:
   def __init__(self, data):
@@ -452,6 +460,7 @@ print(llist)
 
 ## Adding remove()
 
+### Javascript
 ```js
 class Node {
   constructor(value) {
@@ -539,6 +548,7 @@ console.log(list.printList())
 list.insert(0, 999)
 ```
 
+### Python
 ```python
 class Node:
   def __init__(self, data):
