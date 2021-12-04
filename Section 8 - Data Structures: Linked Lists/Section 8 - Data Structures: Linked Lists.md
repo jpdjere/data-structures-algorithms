@@ -554,9 +554,6 @@ class Node:
   def __init__(self, data):
     self.data = data
     self.next = None
-  
-  def __repr__(self):
-    return str(self.data) + " " + str(self.next)
 
 class LinkedList:
   def __init__(self, node):
@@ -630,7 +627,6 @@ print(llist.length)
 ```
 
 
-
 ## Doubly Linked Lists
 
 A doubly linked list is similar to a singly linked list except that each node also links to the node before it.
@@ -643,6 +639,7 @@ So lookup or searching can technically be a little more efficient in a doubly li
 
 The only downside is that we will have to use more memory to store the references to the previous node, for each node.
 
+### Javascript
 ```js
 class Node {
   constructor(value) {
@@ -740,6 +737,88 @@ class DoublyLinkedLink {
 }
 ```
 
+### Python
+```python
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+    self.prev = None # This is new
+
+class LinkedList:
+  def __init__(self, node):
+    self.head = node
+    self.tail = node
+    self.length = 1
+  
+  def __repr__(self):
+      node = self.head
+      nodes = []
+      while node is not None:
+          nodes.append(node.data)
+          node = node.next
+      nodes.append("None")
+      return " <-> ".join(nodes)
+
+  def append(self, newNode):
+    self.tail.next = newNode
+    newNode.prev = self.tail # This is new
+    self.tail = newNode
+    self.length = self.length + 1
+    return self
+
+  def prepend(self, newNode):
+    newNode.next = self.head
+    self.head.prev = newNode # This is new
+    self.head = newNode
+    self.length = self.length + 1
+    return self
+
+  def traverse(self, index):
+    counter = 0
+    returnNode = self.head
+    while counter != index:
+      returnNode = returnNode.next
+      counter = counter + 1
+    return returnNode
+
+  def insert(self, index, newNode):
+    if(index >= self.length):
+      return "Index "+str(index)+" out of bounds"
+
+    if(index == 0):
+      self.prepend(newNode)
+
+    leadNode = self.traverse(index - 1)
+    posteriorNode = leadNode.next  # This is new
+    newNode.next = posteriorNode
+    posteriorNode.prev = newNode  # This is new
+    newNode.prev = leadNode  # This is new
+    leadNode.next = newNode
+    self.length += 1
+    return self
+
+  def remove(self, index):
+    if(index >= self.length):
+      return "Index "+str(index)+" out of bounds"
+
+    if(index == 0):
+      self.head = self.head.next
+      self.length -= 1
+      return self
+    leadNode = self.traverse(index - 1)
+    posteriorNode = leadNode.next.next  # This is new
+    leadNode.next = posteriorNode
+    posteriorNode.prev = leadNode  # This is new
+    self.length -= 1
+    return self
+
+llist = LinkedList(Node("a")).append(Node("b")).prepend(Node("z")).insert(2, Node("55")).remove(2)
+ # z -> a -> 55 -> b -> None
+print(llist)
+print(llist.length)
+```
+
 ## Singly vs Doubly Linked List
 
 When to use each?
@@ -769,6 +848,7 @@ Cons of doubly linked list:
 
 Reversing a **singly linked list**:
 
+# Javascript
 ```js
 class Node {
   constructor(value) {
@@ -826,7 +906,7 @@ class LinkedLink {
       const followSecond = second.next;
       // Update the next to second to be our first
       second.next = first;
-      // Invert first and second
+
       first = second
       second = followSecond
     }
@@ -839,3 +919,85 @@ class LinkedLink {
   }
 ```
 
+# Python
+
+### Python
+```python
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+
+class LinkedList:
+  def __init__(self, node):
+    self.head = node
+    self.tail = node
+    self.length = 1
+  
+  def __repr__(self):
+      node = self.head
+      nodes = []
+      while node is not None:
+          nodes.append(node.data)
+          node = node.next
+      nodes.append("None")
+      return " -> ".join(nodes)
+
+  def append(self, newNode):
+    self.tail.next = newNode
+    self.tail = newNode
+    self.length = self.length + 1
+    return self
+
+  def prepend(self, newNode):
+    newNode.next = self.head
+    self.head = newNode
+    self.length = self.length + 1
+    return self
+
+  def traverse(self, index):
+    counter = 0
+    returnNode = self.head
+    while counter != index:
+      returnNode = returnNode.next
+      counter = counter + 1
+    return returnNode
+
+  def insert(self, index, newNode):
+    # If index passed is larger or equal to length
+    # return an out of bounds error
+    if(index >= self.length):
+      return "Index "+str(index)+" out of bounds"
+    # Edge case when index is 0, just prepend newNode
+    if(index == 0):
+      self.prepend(newNode)
+    leadNode = self.traverse(index - 1)
+    newNode.next = leadNode.next
+    leadNode.next = newNode
+    self.length += 1
+    return self
+
+  def remove(self, index):
+    # If index passed is larger or equal to length
+    # return an out of bounds error
+    if(index >= self.length):
+      return "Index "+str(index)+" out of bounds"
+    # Edge case when index is 0, just update the head
+    if(index == 0):
+      self.head = self.head.next
+      self.length -= 1
+      return self
+    leadNode = self.traverse(index - 1)
+    leadNode.next = leadNode.next.next
+    self.length -= 1
+    return self
+
+llist = LinkedList(Node("a")).append(Node("b")).prepend(Node("z")).insert(2, Node("55"))
+ # z -> a -> 55 -> b -> None
+print(llist)
+print(llist.length)
+
+llist.reverse()
+print(llist) # b -> 55 -> a -> z -> None
+
+```
