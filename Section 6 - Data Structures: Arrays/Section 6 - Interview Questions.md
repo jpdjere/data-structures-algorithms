@@ -414,7 +414,7 @@ Follow up:
 - Try to come up with as many solutions as you can. There are at least three different ways to solve this problem.
 - Could you do it in-place with O(1) extra space?
 
-## Continer with Most Water
+## Container with Most Water
 
 You are given an array of positive integers where each itneger represents the height of a vertical line on a chart. Find two lines which together with the x-axis formas a container that would hold the greatest amount of water. Return the area of water it would hold.
 
