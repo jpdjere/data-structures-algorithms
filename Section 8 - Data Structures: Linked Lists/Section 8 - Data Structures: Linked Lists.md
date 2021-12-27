@@ -992,6 +992,41 @@ class LinkedList:
     self.length -= 1
     return self
 
+  def reverse(self):
+    if self.length <= 1:
+      return self
+
+    # Take first and second nodes
+    first = self.head
+    second = self.head.next
+
+    # Update the tail to be our current head
+    self.tail = first
+
+    # Loop until we reach the end (there's no second)
+    while second:
+      # Take temp auxiliary the following to second
+      followSecond = second.next
+      # Update the next to second to be our first
+      # We only do one switch of "poiting arrows" per loop
+      # from second to first (second.next now points to first)
+      second.next = first
+
+      # And now update the positions of first and second
+      # for the next loop
+      first = second
+      second = followSecond
+    
+    # After finishing looping, remove the reference
+    # of our original head to a next
+    self.head.next = None
+
+    # Set an updated head (there is no second, which
+    # means that first is our last node in the list)
+    self.head = first
+
+    return self
+
 llist = LinkedList(Node("a")).append(Node("b")).prepend(Node("z")).insert(2, Node("55"))
  # z -> a -> 55 -> b -> None
 print(llist)

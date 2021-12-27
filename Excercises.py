@@ -209,3 +209,42 @@ area = height x width = 8 x 3 = 24
 '''
 
 def containerWithGreatestArea(arr):
+
+
+
+
+
+
+## Trapping Rainwater
+
+'''
+Given an array of integers representing an elevation map where the width of each bar is 1, return how much rainwater can be trapped.
+
+[0, 1, 0, 2, 1, 0, 3, 1, 0, 1, 2] -> 8
+
+[] -> 0
+
+[3] -> 0
+
+[3, 4, 3] -> 0
+'''
+def trappingRainwater(heights):
+
+
+
+
+
+
+
+
+## Hashtables: First Recurring Character
+
+'''
+Given an array:
+
+array = [2, 5, 1, 2, 3, 5, 1, 2, 4];
+
+Find the first recurring character. The above array should return 2.
+
+'''
+def findFirstRecurring(nums):
