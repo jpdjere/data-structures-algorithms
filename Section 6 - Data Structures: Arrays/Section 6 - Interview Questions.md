@@ -153,7 +153,7 @@ def maxSubArrayQuadratic(nums):
   return max_sum
 ```
 
-Who can we solve this in linear time (O(N))?
+How can we solve this in linear time (O(N))?
 In order to do that, we need to think in terms of dynamic programming and sub problems. The most important thing to discover when doing dynamic programming is "what is the subproblem?". And that is always slightly different.
 
 In this case, let's start thinking what the sub problem is. What is the subproblem for each element of the array:
@@ -240,11 +240,11 @@ def maxSubArraySumLinear(nums):
     For each element we have 2 choices:
 
     1. Just take the item we are standing on: nums[i]
-       (which means: subarray start an end at the index)
+       (which means: subarray starts and ends at the index)
 
     2. Let the item we are standing on contribute to the
        best max we have achieved ending at i - 1: max_ending_here + nums[i]
-       (which means: exten the previous subarray best, whatever it was)
+       (which means: extend the previous subarray best, whatever it was)
       
     The max of these 2 choices will be the best answer to the subproblem.
     """
@@ -285,7 +285,7 @@ def maxSubarray(nums):
     if value > max_ending_here + value:
       begin = end = index + 1 
     # Check a subcondition of extending the subarray: all of the cases
-    # when option 2 from above is taken end here, but we need to do
+    # when option 2 from above is chosen end here, but we need to do
     # another check, that's why the else if. And the check is:
     # Did I find a new global maximum? Notice that this happens on
     # indeces 5 and 6, but does not happen on index 4, although the
@@ -498,6 +498,7 @@ def containerWithGreatestArea(arr):
   
   return maxArea
 ```
+
 ```js
 const containerWithGreatestArea = (arr) => {
   const len = arr.length;

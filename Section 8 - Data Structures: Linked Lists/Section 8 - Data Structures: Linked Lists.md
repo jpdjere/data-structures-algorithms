@@ -1027,6 +1027,26 @@ class LinkedList:
 
     return self
 
+  # My way
+  def revert(self):
+    first = self.head
+    second = first.next
+
+    self.tail = first
+    self.tail.next = None
+
+    while second:
+      followSecond = second.next
+      second.next = first
+
+      first = second
+      second = followSecond
+
+    # At the end of the loop there's no second
+    self.head = first
+
+    return self
+
 llist = LinkedList(Node("a")).append(Node("b")).prepend(Node("z")).insert(2, Node("55"))
  # z -> a -> 55 -> b -> None
 print(llist)

@@ -82,6 +82,7 @@ s consists only of lowercase English letters.
 
 def findLongestPalindromicSubstring(s):
 
+https://leetcode.com/problems/longest-palindromic-substring/discuss/751188/Simple-Easy-to-Follow-Python
 
 
 ## Excercise: Maximum Subarray
@@ -196,7 +197,7 @@ def rotate(nums: List[int], k: int) -> None:
 ## Excercise: Container with Most Water
 
 '''
-You are given an array of positive integers where each itneger represents the height of a vertical line on a chart. Find two lines which together with the x-axis formas a container that would hold the greatest amount of water. Return the area of water it would hold.
+You are given an array of positive integers where each integer represents the height of a vertical line on a chart. Find two lines which together with the x-axis formas a container that would hold the greatest amount of water. Return the area of water it would hold.
 
 ![](2021-11-23-08-24-15.png)
 
@@ -248,3 +249,26 @@ Find the first recurring character. The above array should return 2.
 
 '''
 def findFirstRecurring(nums):
+
+
+
+
+
+## Linked Lists: Implement a Singly Linked List
+
+class Node:
+
+class LinkedList:
+  def __init__(self):
+  def append(self):
+  def prepend(self):
+  def traverse(self):
+  def insert(self):
+  def remove(self):
+
+## Linked Lists: Reverse a Singly Linked List
+
+class Node:
+
+class LinkedList:
+  def reverse(self):
