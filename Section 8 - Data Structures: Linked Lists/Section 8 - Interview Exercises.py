@@ -81,3 +81,41 @@ def reverseBetweenLeftRight(head, left, right):
   if left == 1:
     return first
   return head
+
+
+# Merge Multi-Level Doubly-Linked List
+
+def flattenDoublyLinkedListe(head):
+  # Start by defining a current node and looping
+  currentNode = head
+
+  while currentNode:
+    # Check if the current node has a child
+    child = currentNode.child
+    if child:
+      # Save the next node to attach the end of the sublist
+      nextNode = currentNode.next
+      # First update the child's prev to link to its parent
+      child.prev = currentNode
+      # Update the current node's next to point to its child
+      currentNode.next = child
+      # Clear the parent's ref to its Child
+      currentNode.child = None
+
+      # Loop again through the sublist to find the end of the list
+      currentSubNode = child
+      while currentSubNode.next:
+        currentSubNode = currentSubNode.next
+
+      # Once we find the end of the list, point the nextNode previous
+      # to the end of the sub list. Then point the next of the end of the
+      # sublist to the next node. BUT FIRST: check there is a nextNode
+      if nextNode:
+        nextNode.prev = currentSubNode
+        currentSubNode.next = nextNode
+
+    # Move to the next node in the linked list for the next loop iteration
+    currentNode = currentNode.next
+
+  return head
+  

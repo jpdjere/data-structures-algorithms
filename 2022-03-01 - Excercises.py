@@ -614,3 +614,43 @@ class LinkedList:
     return self
 
 
+# M, N reversals
+"""
+Given numbers M, N, reverse only nodes M through N of a linked list.
+[1, 2, 3, 4, 5] M = 2, N = 4
+--> [1, 4, 3, 2, 5]
+     p    L         R    a
+1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 
+1 -> 2 -> 5 -> 4 -> 3 -> 6 -> 7
+"""
+
+def reverseBetweenLeftRight(head, left, right):
+  counter = 1
+  currentNode = start = head
+
+  while counter < left:
+    start = currentNode
+    currentNode = currentNode.next
+    counter += 1
+  
+  first = newReversedTail = currentNode
+  second = first.next
+
+  while counter >= left and counter < right:
+    followSecond = second.next
+
+    second.next = first
+
+    first = second
+    second = followSecond
+
+  # First is new reversed head
+  # Second is the node where the ll continues unreversed
+  start.next = first
+  newReversedTail.next = second
+
+  if left == 1:
+    return first
+  return head
+
+
