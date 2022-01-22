@@ -85,7 +85,7 @@ def reverseBetweenLeftRight(head, left, right):
 
 # Merge Multi-Level Doubly-Linked List
 
-def flattenDoublyLinkedListe(head):
+def flattenDoublyLinkedList(head):
   # Start by defining a current node and looping
   currentNode = head
 
@@ -119,3 +119,65 @@ def flattenDoublyLinkedListe(head):
 
   return head
   
+# Linked List Cycle Detection
+
+"""
+Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer.
+
+Input: head = [3,2,0,-4], pos = 1
+Output: tail connects to node index 1
+Explanation: There is a cycle in the linked list, where tail connects to the second node.
+
+Input: head = [1,2], pos = 0
+Output: tail connects to node index 0
+Explanation: There is a cycle in the linked list, where tail connects to the first node.
+"""
+
+## Approach 1: Naive Approach
+
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if head == None:
+            return None
+        currentNode = head
+        seenNodes = set()
+        while currentNode not in seenNodes:
+            if currentNode.next == None:
+                return None
+            seenNodes.add(currentNode)
+            currentNode = currentNode.next
+            
+        return currentNode
+
+
+## Approach 2: Floyd's Tortoise and Hare Algorithm
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # Check edge case of Head being null
+        if head == None:
+            return None
+        tortoise = head
+        hare = head
+        
+        while True:
+            # Move each a step forward
+            tortoise = tortoise.next
+            hare = hare.next
+            # Check if hare has reached the tail or passed it
+            if hare == None or hare.next == None:
+                return None
+            else:
+                hare = hare.next
+                
+            if hare == tortoise:
+                break
+    
+        p1 = head
+        p2 = hare
+        
+        while p1 != p2:
+            p1 = p1.next
+            p2 = p2.next
+        return p1

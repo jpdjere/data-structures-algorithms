@@ -619,38 +619,246 @@ class LinkedList:
 Given numbers M, N, reverse only nodes M through N of a linked list.
 [1, 2, 3, 4, 5] M = 2, N = 4
 --> [1, 4, 3, 2, 5]
+
+[1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7] L = 3 and R = 5
      p    L         R    a
 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 
 1 -> 2 -> 5 -> 4 -> 3 -> 6 -> 7
 """
-
 def reverseBetweenLeftRight(head, left, right):
   counter = 1
-  currentNode = start = head
-
+  currentItem = previousLeft = head
   while counter < left:
-    start = currentNode
-    currentNode = currentNode.next
+    previousLeft = currentItem
+    currentItem = currentItem.next
     counter += 1
-  
-  first = newReversedTail = currentNode
-  second = first.next
 
-  while counter >= left and counter < right:
-    followSecond = second.next
+  first = startOfReversedPart = currentItem
+  second = first.next
+  while counter >= left and counter <= right:
+    afterSecond = second.next
 
     second.next = first
 
     first = second
-    second = followSecond
+    second = afterSecond
+  
+    counter += 1
 
-  # First is new reversed head
-  # Second is the node where the ll continues unreversed
-  start.next = first
-  newReversedTail.next = second
+  beginOfReversedPart = first
+  afterRight = second
+
+  previousLeft.next = beginOfReversedPart
+  startOfReversedPart.next = afterRight
 
   if left == 1:
-    return first
+    return beginOfReversedPart
   return head
 
 
+
+
+
+
+
+
+
+
+# Linked Lists: Merge Multi-Level Doubly-Linked List
+"""
+You are given a doubly linked list, which contains nodes that have a next pointer,
+a previous pointer, and an additional child pointer.
+This child pointer may or may not point to a separate doubly linked list,
+also containing these special nodes. These child lists may have one or more
+children of their own, and so on, to produce a multilevel data structure
+as shown in the example below.
+
+Given the head of the first level of the list, flatten the list so that all
+the nodes appear in a single-level, doubly linked list. Let curr be a
+node with a child list. The nodes in the child list should appear after curr and
+before curr.next in the flattened list.
+
+Return the head of the flattened list. The nodes in the list must have all of their
+child pointers set to null.
+"""
+
+"""
+How the multilevel linked list is represented in test cases:
+
+We use the multilevel linked list from Example 1 above:
+
+ 1---2---3---4---5---6--NULL
+         |
+         7---8---9---10--NULL
+             |
+             11--12--NULL
+
+  
+1---NULL
+|
+7---8---9---10--NULL
+    |
+    11--12--NULL
+
+The serialization of each level is as follows:
+
+[1,2,3,4,5,6,null]
+[7,8,9,10,null]
+[11,12,null]
+To serialize all levels together, we will add nulls in each level to signify no node 
+connects to the upper node of the previous level. The serialization becomes:
+
+[1,    2,    3, 4, 5, 6, null]
+             |
+[null, null, 7,    8, 9, 10, null]
+                   |
+[            null, 11, 12, null]
+Merging the serialization of each level and removing trailing nulls we obtain:
+
+[1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
+"""
+def flattenDoublyLinkedList(head):
+  current = head
+  while current:
+    if current.child:
+      child = current.child
+      nextToAttach = current.next
+      current.next = child
+      child.prev = current
+      current.child = None
+
+      currentSubNode = child
+      while currentSubNode.next:
+        currentSubNode = currentSubNode.next
+      currentSubNode.next = nextToAttach
+      if nextToAttach:
+        nextToAttach.prev = currentSubNode
+    current = current.next
+  return head
+
+
+# Linked List Cycle Detection
+
+"""
+Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer.
+
+Input: head = [3,2,0,-4], pos = 1
+Output: tail connects to node index 1
+Explanation: There is a cycle in the linked list, where tail connects to the second node.
+
+Input: head = [1,2], pos = 0
+Output: tail connects to node index 0
+Explanation: There is a cycle in the linked list, where tail connects to the first node.
+"""
+
+## Approach 1: Naive Approach
+def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+  if head == None or head.next == None:
+    return None
+  current = head
+  seenNodes = set()
+  while current:
+    if current in seenNodes:
+      return current
+    seenNodes.add(current)
+    current = current.next
+  return None
+      
+
+
+## Approach 2: Floyd's Tortoise and Hare Algorithm
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+      if head == None or head.next == None:
+        return None
+
+      hare = tortoise = head
+
+      while True:
+        tortoise = tortoise.next
+        hare = hare.next
+
+        if hare == None or hare.next == None:
+          return None
+        else:
+          hare = hare.next
+
+        if hare == tortoise:
+          break
+      
+      p1 = head
+      p2 = hare
+      while p1 != p2:
+        p1 = p1.next
+        p2 = p2.next
+      
+      return p1
+
+
+
+
+# Stacks: Valid Parentheses (Easy)
+
+"""
+Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+An input string is valid if:
+
+Open brackets must be closed by the same type of brackets.
+Open brackets must be closed in the correct order.
+
+Example 1:
+
+Input: s = "()"
+Output: true
+Example 2:
+
+Input: s = "()[]{}"
+Output: true
+Example 3:
+
+Input: s = "(]"
+Output: false
+"""
+def isValid(self, s: str) -> bool:
+
+
+
+# Stacks: Minimum Remove to Make Valid Parentheses (Medium)
+"""
+Given a string s of '(' , ')' and lowercase English characters.
+
+Your task is to remove the minimum number of parentheses ( '(' or ')', in any positions )
+so that the resulting parentheses string is valid and return any valid string.
+
+Formally, a parentheses string is valid if and only if:
+
+It is the empty string, contains only lowercase characters, or
+It can be written as AB (A concatenated with B), where A and B are valid strings, or
+It can be written as (A), where A is a valid string.
+ 
+
+Example 1:
+
+Input: s = "lee(t(c)o)de)"
+Output: "lee(t(c)o)de"
+Explanation: "lee(t(co)de)" , "lee(t(c)ode)" would also be accepted.
+Example 2:
+
+Input: s = "a)b(c)d"
+Output: "ab(c)d"
+Example 3:
+
+Input: s = "))(("
+Output: ""
+Explanation: An empty string is also valid.
+ 
+
+Constraints:
+
+1 <= s.length <= 105
+s[i] is either'(' , ')', or lowercase English letter.
+"""
+def minRemoveToMakeValid(self, s: str) -> str:
