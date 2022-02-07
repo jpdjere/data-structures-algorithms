@@ -359,11 +359,11 @@ So there are three steps that need to be added to the normal BSF solution:
 2. **Initialize our currentLevel array**
 3. **Push currentLevel array into our global result**
 
-So first, let's identify the level of tree. In order for us to know wether we are at some new level of the tree, we need to figure out whether we are done with the previous level of the tree.
+So first, let's identify the level of tree. In order for us to know whether we are at some new level of the tree, we need to figure out whether we are done with the previous level of the tree.
 
-Taking a look at the `while` loop in our code, we know that its going to clear through the queue (q). But let's think what happens when we run BSF in the first place:
+Taking a look at the `while` loop in our code, we know that it's going to clear through the queue (q). But let's think what happens when we run BSF in the first place:
 
-We start with q containing only our root node:
+We start with `q` containing only our root node:
 
 ```py
 q = [root]
@@ -523,4 +523,55 @@ Notice that our `currentLevel` array should be initialized when we are at the st
 And we know that **we are at the start of a level when `processedCounter` is 0; and that we are at the end of a level when `processedCounter` is 1.**
 
 
+### Coding out our solution
 
+```py
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        # Check for non-existing root and return base case
+        if root is None:
+            return []
+        # Initialize result and queue with only root
+        res = []
+        q = [root]
+        # Initialize variables needes for level detection and data collection
+        queueSize = len(q)
+        processedCounter = 0
+        currentLevel = []
+        while len(q) > 0:
+            currentNode = q.pop(0)
+            currentLevel.append(currentNode.val)
+            processedCounter += 1
+
+            if currentNode.left:
+              q.append(currentNode.left)
+            if currentNode.right:
+              q.append(currentNode.right)
+            
+            # If queue size is reached, append currentLevel to res,
+            # and reset currentLevel, processedCounter and queueSize
+            if processedCounter == queueSize:
+              res.append(currentLevel)
+              processedCounter = 0
+              currentLevel = []
+              queueSize = len(q)
+        return res
+```
+
+**Time complexity:**
+
+We only touch our values once (multiple operations for each, but all constant), so time complexity is **O(N)**.
+
+**Space Complexity:**
+
+If we analize our data structure, we'll notice that our `res` variable can hold at max all our nodes, while our `queue` can hold maximally the amount of nodes in the bottom-most layer.
+
+And remember that in a **binary tree, the bottom most level contains N/2 of the total amount of nodes in the tree.**
+
+So this would be **N** for the nodes in `res` plus **N/2** for the nodes in `queue`, which is simplified to a space complexity of **O(N)**.
