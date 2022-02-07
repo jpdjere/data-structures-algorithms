@@ -373,9 +373,110 @@ Let's have a look at how they are implemented, visually;
 
 [Visualgo](https://visualgo.net/en/heap?slide=1)
 
+**Values are added to a heap in order from left to right.** Then the values **bubble up** if the priority order is broken (if the value inserted has a guhger value than its parent.)
+
 If we insert a value to a binary max heap, the worst case time complexity will be **O(log N)**, in the case that the new node has the max value in the whole heap, as the node is inserted below and then it bubbles to the top as it corrected.
 
 In order to truly understand why we need something like a binary heap, and why it is useful, and how they are different from a BST, we need to talk about **priority queues.**
 
+**Warning:** binary heaps are not related at all to "memory heaps" used in the engines of different programming languages like Javascript. Memory heaps are not a binary heap data structure.
 
+## Priority Queues
+
+In a **binary heap**, unlike **trees** there is no order from left to right: on the same level, a number can be followed by a smaller number.
+
+The beauty of binary heaps is that they take the least amount of space possible, because insertion is always left to right. That means there's no possibility of having an unbalanced binary heap; we don't have to rebalance them like a tree.
+
+Because of this left to right insertion, they preserve the order of insertion. So we can implement binary heaps using arrays instead of nodes.
+
+So **the only guarantee that binary heaps gives us is that the parent is always greater than the children.**
+
+Besides being memory efficient, binary heaps are really useful for things such as **prority queues.**
+
+Notice that this is different from **queues**, in that those always have a FIFO order. In **priority queues**, each element has a set **priority** assigned to it: elements with a **higher priority** are served before elements with **lower priorities**.
+
+A good example is the ordering of patients in an emergency room: patients need to be treated in the order of the seriousness of their emergency. These patients would have assigned a **higher priority** and would be dealt with first than other patients.
+
+Another way to think of priority queues is on the priority of boarding into an airplane. For example, first of all a passenger arrives:
+
+![](2022-01-31-19-28-41.png)
+
+But then the captain shows up. Because the captain should board the plan before the passengers, and thus has a higher priority, he gets puts as priority as the **root node**, because his priority value is higher than that of the passenger:
+
+![](2022-01-31-19-29-51.png)
+
+Then another passenger arrives. Since we are doing left to right insertion, we put him to the right of the captain, on the same level as the other passenger:
+
+![](2022-01-31-19-32-24.png)
+
+So the **priority queue** now shows that the first to board will be the captain, then the first passanger that arrived, then the second one.
+
+Then a steward arrives, who should board before the passengers, but after the captain:
+
+![](2022-01-31-19-34-10.png)
+
+Finally, another passenger arrives, and we further set them up using left to right insertion:
+
+![](2022-01-31-19-34-47.png)
+
+Now with a full priority queue, it is very simple to determine the order in which everybody should board the plane.
+
+In same specific cases, **binary heaps** are better/more convenient than binnary search trees. Although searching through a binary heap is much slower than searching through a binary heap, a heap allows us to maintain an idea of **priority**.  
+
+Also, a binary heap allows for **fast inserts**, although some insert might requirse some bubbling up if the priority is high (which has time complexity of O(log N)).
+
+In most use cases of binary heap trees we have a constant time operation called **findMin** and **findMax**.
+
+![](2022-01-31-19-39-14.png)
+
+
+## Trie
+ 
+A **trie** is a specialized tree **used in searching**, most often used with text. 
+
+In most cases of search, it **can outperform** BST, hash tables and other data structures, depending on the type of search you're doing.
+
+Tries allow you to know **if a word** or part of a word exists in a body of text.
+
+![](2022-01-31-19-50-02.png)
+
+A trie has usually an **empty root node** and from there letters are added (notice that it doesn't follow the same "two children per node" of BST). In the case of a trie used to store words, each node would have a maximum of 26 children nodes, one fore each letter of the alphabet.
+
+The **power of the trie** is when doing searching, for example, when searching the letter N in the trie above, we immediately know that there are at least two words that begin with N.
+
+That's why another name for a **trie** is also **prefix tree**.
+
+Is is also very used for **autocompletion**: for example, when searching something up on Google, it tries to autocomplete what we are looking for by looking up saved values in a trie, based on what we already wrote.
+
+The great benefit of **tries** are **speed and space complexity**.
+
+**Time Complexity:** when attempting to find a word in a tree, we don't need to go through all nodes in the tree. We would first try to find it's first letter and continue from there. We need to find a number of nodes that is equal to the length of the words (one for each letter in the word). The time complexity of this search is therefore **O(length of the word)**.
+
+**Space Complexity:** because we use prefixes (N- is a prefix for "News" and "Not"), this growing prefixes don't need to be stored multiple times for each word. It is rather stored once, and words are formed from children linking down from those prefixes. This saves a lot of space.
+
+## Recursion and Searching in Binary Trees and BST
+
+Binary Search Trees have:
+
+- **2 Types of Search Types:**
+  1. Breadth First Search (BFS)
+  2. Depth First Search (DFS)
+
+- **3 Types of Traversals:**
+  1. Pre-Order Traversal
+  2. In-Order Traversal
+  3. Post-Order Traversal
+
+All these techniques revolves around navigating through a binary tree. The key to solving problems with them is learning to figure out which of them should be used in your solution so they can help actually execute the logical solution that you come up for the question.
+
+
+### Breadth First Search (BFS)
+
+**Breadth First Search (BFS)** assumes that the node that we are looking for is closer to the root, rather than further. This is because, BFS attempts to explore the nodes that are closer to the root node first, before exploring the ones that are further, but it still always go by the order of searching first the nodes that are closer to the root.
+
+First, the closest nodes to the root are going to be the root's children, so it will start by exploring those two children. Then, it's going to explore those children's children, on the next level. So BFS will explore each level, in order, as extensively as it can.
+
+### Depth First Search (DFS)
+
+**Depth First Search (DFS)** wants to thoroughly explore a single path all the way down, before it does the same with a different path. It prioritizes how to search by thinking that the node that we are looking for is probably at the very end of the path that it explores.
 
