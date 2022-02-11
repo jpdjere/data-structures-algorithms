@@ -575,3 +575,301 @@ If we analize our data structure, we'll notice that our `res` variable can hold 
 And remember that in a **binary tree, the bottom most level contains N/2 of the total amount of nodes in the tree.**
 
 So this would be **N** for the nodes in `res` plus **N/2** for the nodes in `queue`, which is simplified to a space complexity of **O(N)**.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+---
+# Binary Tree Right Side View (Medium)
+
+https://leetcode.com/problems/binary-tree-right-side-view/
+
+Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
+
+![](2022-02-09-14-56-42.png)
+
+**Example 1:**
+Input: root = [1,2,3,null,5,null,4]
+Output: [1,3,4]
+
+**Example 2:**
+Input: root = [1,null,3]
+Output: [1,3]
+
+**Example 3:**
+Input: root = []
+Output: []
+
+**Constraints:**
+```
+The number of nodes in the tree is in the range [0, 100].
+-100 <= Node.val <= 100
+```
+
+## My solution
+
+This problem can be solved as a variant of the previous problem. If in the last problem the end result was an array containing arrays, one for each level, we can simply get the same array of arrays and then simply push the last element of each level into a new array. And that would be the answer. Both time and space complexity would be the same:
+
+```py
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None:
+            return []
+        res = []
+        q = [root]
+        currentLevel = []
+        levelCounter = 0
+        queueSize = len(q)
+        while len(q) > 0:
+            currentNode = q.pop(0)
+            currentLevel.append(currentNode.val)
+            levelCounter += 1
+            
+            if currentNode.left:
+                q.append(currentNode.left)
+            if currentNode.right:
+                q.append(currentNode.right)
+            
+            if levelCounter == queueSize:
+                res.append(currentLevel)
+                queueSize = len(q)
+                levelCounter = 0
+                currentLevel = []
+        rightSide = []
+        for level in res:
+            rightSide.append(level.pop())
+        return rightSide
+```
+
+Or even more simply, we dont' need to create the intermediate array with the whole level: we can just push into `res` when we know that we are at the end of a level:
+
+```py
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None:
+            return []
+        res = []
+        q = [root]
+        levelCounter = 0
+        queueSize = len(q)
+        while len(q) > 0:
+            currentNode = q.pop(0)
+            levelCounter += 1
+            
+            if currentNode.left:
+                q.append(currentNode.left)
+            if currentNode.right:
+                q.append(currentNode.right)
+            
+            if levelCounter == queueSize:
+                res.append(currentNode.val)
+                queueSize = len(q)
+                levelCounter = 0
+        return res
+```
+
+## Another Solution with DSF and Traversal Types
+
+While this problem can be solved like seen above, we'll solve it now using DSF and see how the different traversal types work and how we can incorporate them in our problem solving flow.
+
+Let's take the following tree example:
+
+
+![](2022-02-09-15-49-24.png)
+
+### Step 1: Verify the constraints
+
+- What if the tree is null?
+  - Return an empty array: `[]`
+
+### Step 2: Write out test cases
+
+Let's use the tree seen in the image above, but there's two cases we need to consider in this problem when coming up with a test case:
+
+- We need to include nodes that **are blocked from view by other nodes on the same level, but which are more to the right**.
+- We need to include nodes that **are not on the right edge of the tree (maybe to the left edge even) but which we will see as they are not blocked by other nodes**.
+
+## Depth First Search (DFS) Approach
+
+This is the first time that we will include the 3 types of traversals into our process:
+
+- **3 Types of Traversals:**
+  1. Pre-Order Traversal
+  2. In-Order Traversal
+  3. Post-Order Traversal
+
+//TODO TO-DO
+
+Finish: https://www.udemy.com/course/master-the-coding-interview-big-tech-faang-interviews/learn/lecture/22363370#content
+
+https://www.udemy.com/course/master-the-coding-interview-big-tech-faang-interviews/learn/lecture/22363374#content
+
+https://www.udemy.com/course/master-the-coding-interview-big-tech-faang-interviews/learn/lecture/22363380#content
+
+https://www.udemy.com/course/master-the-coding-interview-big-tech-faang-interviews/learn/lecture/22363386#content
+
+
+
+
+.
+
+.
+
+.
+
+.
+
+.
+
+---
+# Full & Complete Binary Trees - Number of Nodes in Complete Tree
+
+Until now, we have only looked at "normal" binary trees, but sometimes interviewers will step up the complexity of an exercise by mentioning that the tree is full, or complete.
+
+Let's analyze how taht would change a question.
+
+But first let's take a look at the difference between a **full tree** and a **complete tree**.
+
+## Full and Complete Trees
+
+A **full tree** is a tree in which every node has either 0 or 2 children (but cannot have one):
+
+![](2022-02-11-04-56-49.png)
+
+A **complete tree** is a tree in which every level is completely full, with the exception of the last one, which can be incomplete. However, the nodes in the last level, if incomplete, must be pushed as leftwards as possible:
+
+![](2022-02-11-04-58-58.png)
+
+![](2022-02-11-04-59-20.png)
+
+![](2022-02-11-04-59-44.png)
+
+A tree can also be **full and complete**, where every level is filled with nodes, so all nodes will have two children each, except for those of the last level, which have 0 children:
+
+![](2022-02-11-05-01-01.png)
+
+There's more complexity and nuance in receiving a **complete** tree rather than a full one.
+
+## Complete Tree Excercise
+
+Given a complete binary tree, count the number of nodes.
+
+The following complete tree has 15 nodes:
+
+![](2022-02-11-05-03-12.png)
+
+However, the following (also) complete binary trees have 12 and 8 nodes, respectively:
+
+![](2022-02-11-05-04-14.png)
+
+![](2022-02-11-05-04-27.png)
+
+So when we think about our solution for these type of trees, we need to think about this as the main difference that the different complete trees that we receive can have.
+
+### Step 1: Verify the constraints
+
+If we receive an empty binary tree, return 0
+
+### Step 2: Write out some test cases
+
+Two conditional cases should jump out:
+
+1. The last level is completely full
+2. The last level has only one value
+
+![](2022-02-11-05-07-04.png)
+
+The remaining value represents any other intermediate value.
+
+## Thinking about an approach
+
+We have seen that botht **DFS** and **BFS** can be used to count the nodes of a binary tree trivially. However, we also know that both the time and the space complexity of these approaches is **O(N)**.
+
+We should immediately let our interviewer know that we have this insight, but also knowing that we are dealing with a special kind of tree, a complete tree, that we know that there must be a more optimal solution. And there is.
+
+The idea that we are dealing with a **complete binary tree** is the real point of this question, and we should analyze which insights we can derive from that idea to bring down the time or space complexity down from **O(N)**, to either **O(log N)**, or **O(1)**, which are the only two faster complexities.
+
+What things do we know related to **O(log N)** that are also related to the structures of the trees we are seeing here?
+
+1. The shape of a full and complete binary tree is similar to what we leverage in the divide and conquer approach.
+2. The height of the tree is **log2(N)**. So for example, log2(15) =~ 4
+3. The number of nodes in the last level is **Math.ceil(N/2)**
+
+## Thinking deeply about a Full Binary Tree
+
+### Do we need to traverse this tree?
+
+No, we don't. This a clear case for an exercise in which we don't need to traverse the tree to solve it, but leverage our knowledge of full binary trees to do it. (If we traversed it, we would be solving it in linear time, which is not our objective).
+
+ So, here, leveraging what we know about full trees, we should split our problem into two sections:
+
+ 1. **finding the number of layers that our tree has, in order to find out how many nodes we have in all full layers (all except the last)**
+ 2. **finding out how many nodes are in the last layer of our tree**
+
+Knowing these two facts we can calculate the number of nodes for any full binary tree, since with the number of layers we can know the amount of nodes that there are on the tree up to the second to last layer, and then we can sum up to that the amount of trees in the last layer.
+
+![](2022-02-11-06-02-37.png)
+
+**How efficiently can we count the nodes in each of these two subproblems?**
+
+First: remember that we want to achieve a time complexity of log(N) for each of these two parts, so that the final solution will be also log(N) in the worst case.
+
+### Subproblem 1
+
+Remembering that, until the second to last layer of full trees, all layers are full, we can use a little math to know how many nodes we have in the tree.
+
+![](2022-02-11-06-09-27.png)
+
+Knowing the height of the tree we can calculate the number of layers in the last layer (if it were full). In this example we see:
+
+```
+  Nodes in last layer = 2 ^ height = 2 ^ (4 - 1) = 2 ^ 3 = 8
+```
+
+But while this doesn't help us much because we don't know how many nodes we have in the last layer (that's the second subproblem), we can see that the max number of nodes in all the layers of a full tree, except for the last, is equal to the max amount of nodes in the last layer minus one. In the example above, we have 8 nodes in the last layer, and 7 in the rest of the tree. This relationship applies to all trees:
+
+```
+  Nodes in tree except for last layer = 2 ^ height - 1 = 2 ^ (4 - 1) - 1 = 2 ^ 3 - 1 = 8 - 1 = 7
+```
+
+So knowing the height of the tree wan can calculate the solution to subproblem 1 in constant time. 
+
+But finding out the height of the tree will require us to traverse down the leftmost side of the tree until we reach the first level in which we don't have any more nodes. This will take **O(log N)** time, which makes the solution of the whole subproblem 1 to also have that time complexity. This is, however, within our expectations (still faster than linear time).
+
+### Subproblem 2
+
+Now we need to think how to find out how many nodes are in the last level of the tree. remembering that in a full binary tree all nodes in the last layer are pushed to the left, if we can find out which is the last node in the layer then it is trivial to know how many nodes there are in the level.
+
+So, we know that **the minimum number of nodes in the last layer has to be 1** (since it can't be empty.)
+
+The **maximum is equal to:** `2 ^ (h - 1)`. In this case, we have 2 ^ (4 - 1) = 8.
+
+Knowing the min and max we could apply indices to the possible places for nodes in the last layer:
+
+![](2022-02-11-06-28-23.png)
+
+If we do binary search, and are able to find that, for example, in index 4 there is a node, we know that there are at least 5 nodes in the last layer (4 + 1 = 5, cause we have 0 indexing). If with binary search we can find the most rightward node, we can know how many nodes there are in the bottom level.
+
+
+
+
+
