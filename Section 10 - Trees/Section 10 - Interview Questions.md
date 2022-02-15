@@ -741,7 +741,7 @@ https://www.udemy.com/course/master-the-coding-interview-big-tech-faang-intervie
 .
 
 ---
-# Full & Complete Binary Trees - Number of Nodes in Complete Tree
+# Full & Complete Binary Trees - Number of Nodes in Complete Tree (Medium)
 
 Until now, we have only looked at "normal" binary trees, but sometimes interviewers will step up the complexity of an exercise by mentioning that the tree is full, or complete.
 
@@ -857,7 +857,7 @@ But finding out the height of the tree will require us to traverse down the left
 
 ### Subproblem 2
 
-Now we need to think how to find out how many nodes are in the last level of the tree. remembering that in a full binary tree all nodes in the last layer are pushed to the left, if we can find out which is the last node in the layer then it is trivial to know how many nodes there are in the level.
+Now we need to think how to find out how many nodes are in the last level of the tree. Remembering that in a full binary tree all nodes in the last layer are pushed to the left, if we can find out which is the last node in the layer then it is trivial to know how many nodes there are in the level.
 
 So, we know that **the minimum number of nodes in the last layer has to be 1** (since it can't be empty.)
 
@@ -869,7 +869,382 @@ Knowing the min and max we could apply indices to the possible places for nodes 
 
 If we do binary search, and are able to find that, for example, in index 4 there is a node, we know that there are at least 5 nodes in the last layer (4 + 1 = 5, cause we have 0 indexing). If with binary search we can find the most rightward node, we can know how many nodes there are in the bottom level.
 
+The other thing that we have to think about is: when we start our function, we actually have no idea how many nodes are in the last level. We can tell the height of the tree, and we can know what the **maximum possible** amount of nodes in the last layer can be, but we don't actually know what the **actual number** of nodes in that last layer is.
+
+So there are 2 things we need to solve:
+
+1. we need to find an effective and efficient way to determine what that rightmost node is.
+2. when searching a node (to see if it exists), traversing down the tree, how do we know when to turn left or right in order to reach a specific node position?
+
+The solution for these two issues:
+
+1. the only way we can do a search in **O(log N)** time is with binary search, as we have said. And here we have an order set of values, our indeces, that we know have a minimum of 0 (first position) and a maximum of `2 ^ h - 1` (last position).
+
+Let's initialize our bounderies, with **left** to 0, our minimum, and **right** to 7, our maximum which comes out of `2 ^ 4 - 1`. 
+
+If we take the half way point between the two, we get `3.5`, which we will round up to `4`.
+
+![](2022-02-12-13-52-04.png)
+
+So if we search and find a node at index `4`, we know that there are **at least 5 nodes** in the last layer: the one we just found, and all those to the left, that are guaranteed by definition to be there.
+
+However, we do not know if that is **the last node** in the layer, as they could be more to the right. We should then continue our binary search, updating our left marker from `0` to `4`.
+
+![](2022-02-12-13-55-33.png)
+
+Normally, in binary search, you calculate a **mid value** and compare it to a specific value that you are searching for. Here, on the other side, we are just trying to find **if the value we are seaching exists** in the last layer of the tree. This means that this search is **inclusive**, which is why we round up instead of down.
+
+So let's update our **mid** -which ends up at `6`- and continue:
+
+![](2022-02-12-13-58-12.png)
+
+We now find out that there's no node at position `6`, which means that **every node to it right, including itself** does not exist.
+
+We therefore move the right value to **mid value minus 1**, because we are certain that the previous mid value does not have a node.
+
+![](2022-02-12-14-02-33.png)
+
+Now we do the search, find out that the index at `5` has no node, so we shift our **right** value again to the left, ending up in `4`.
+
+![](2022-02-12-14-06-16.png)
+
+Unlike traditional binary search, when **left** and **right** overlap, we don't need to perform another search (in normal BS, we would still need to see if that value coincides with our search value), because in the case the node is guaranteed to exists, and to be the most rightward node in the layer.
+
+**So we have used binary search to find out that the last node in the last layer is in index 4.**
+
+2. How to search down for specific node from the root, knowing exactly when to turn left or right?
+
+Let's imagine we want to get to index `4` from the root.
+
+![](2022-02-12-14-20-21.png)
+
+To start with, how can we determine mathematically that the node we are trying to navigate to is on the left side or the right side of the tree? Because, knowing this we can make our first choice of navigating left or right from the root.
+
+This is actually **solved with binary search again**:
+
+We start by retaking our inital **left** and **right** indeces, which are `0` and `7`, and get the **mid value**, rounded up, which is `4`.
+
+![](2022-02-12-14-24-12.png)
+
+Remembering to consider that the search is **inclusive**, comparing the value which we are looking for, which is `4`, with the midpoint that we got, which is also `4`, we can safely assume that **our value is in the right hand side of the tree**, and that we can "throw away" the whole left branch, and start our traversal with a step to the **right**.
+
+So, to sum up:
+- if the value we are looking for **is greater or equal** than the midpoint that we calculated, then we **should go right**.
+- if the value we are looking for **is less than** the midpoint we calculated, then **we should go left**.
+
+So, now we move right, we update our left value to be our the **mid value** that we had calculated, that is `4`, and recalculate the midpoint, which in this step ends up as `6`, because `4 + 7 / 2 = 6` when rounded up.
+
+![](2022-02-12-14-30-09.png)
+
+Now, since `6` is greater than `4` (so the value we are looking for is less than our mid value), we know we can discard our right side, and **step down to the left**:
+
+![](2022-02-12-14-32-43.png)
+
+Now, when updating our **right** border, we need to take into account that the new limit is calculated as: **mid value - 1**:
+
+![](2022-02-12-14-34-01.png)
+
+Which is `5` and also leads us to a **mid value** of 5.
+
+Since `5` is again less than our search value, we step down **to the left** and arrive at position 4.
+
+Here, we can know that the traversal stop because the level at which we are is the height of the tree. So we have reached the position we were looking for, and in this case, affirmed that there was a node there in index 5. And we have done this **in O(log N) time**.
+
+Now with **Subproblem 1** and **Subproblem 2** solved, we can determine which index is the last one to be occupied by a node, and thus how many nodes are present in the last layer of the tree.
+
+So:
+
+```
+Number of nodes in the last layer = index + 1 = 4 + 1 = 5
+
+Number of nodes in all the other layers = 2 ^ h - 1 = 2 ^ 4 - 1 = 7
+
+TOTAL NUMBER OF NODES IN THE BINARY TREE = 7 + 5 = 12
+```
+
+And we have calculated this in **O(log N)** time, since all the subprocesses we did to reach to this number had that same time complexity.
+
+## Coding out our solution
+
+```py
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def countLevels(self, node, count):
+      if node is None:
+        return count
+      
+      count = count + 1
+      return self.countLevels(node.left, count)
+    
+    def nodeAtIndexExists(self, indexToFind, height, root):
+      node = root
+      left = 0
+      right = 2 ** height - 1
+      for i in range(height):
+        mid = ceil((left + right) / 2)
+        if indexToFind >= mid:
+          left = mid
+          node = node.right
+        else:
+          right = mid - 1
+          node = node.left
+      return node is not None
+
+    def countNodes(self, root: Optional[TreeNode]) -> int:
+      if root is None:
+        return 0
+      
+      height = self.countLevels(root, 0) - 1 ## Substract 1 to get 0-indexed levels
+      if height == 0:
+        return 1
+      nodesBeforeLastLevel = 2 ** height - 1
+
+      n = 2 ** height - 1
+      left = 0
+      right = 2 ** height - 1
+
+      # Search for mid to see if it exists
+      while left < right:
+        indexToFind = ceil((left + right) / 2)
+        if self.nodeAtIndexExists(indexToFind, height, root):
+          left = indexToFind
+        else:
+          right = indexToFind - 1
+
+      nodesInLastLevel = left # Could also be right
+
+      return nodesBeforeLastLevel + nodesInLastLevel + 1
 
 
+```
+
+.
+
+.
+
+.
+
+.
+
+.
+
+---
+# Validate Binary Search Tree (Medium)
+
+When dealing with BST trees, most of the logic that applies for binary trees applies as well, but you have to add into consideration the logic that applies to how the nodes are placed and ordered in the tree.
+
+## Question
+
+**Given a binary search tree, determine if it is a valid search tree.**
+
+Let's go over again what it means for a tree to be valid.
+
+![](2022-02-14-17-08-42.png)
+
+Every single node to the right of a value has to be **lesser**, while every single node to its right must be **greater**.
+
+![](2022-02-14-17-09-30.png)
+
+## Step 1: Validate our constraints
+
+**Can there be duplicate values in the tree?**
+
+Yes, but if you receive duplicate values, the tree is not a valid binary search tree.
+
+> **IMPORTANT:** This is a very important question to ask in every Binary Search Tree question. If they are allowed, one should also ask what are the rules that govern them: do we put duplicate value to the left of their parent node, or to the right? 
+
+## Step 2: Write out some test cases
+
+![](2022-02-14-17-13-45.png)
+**Should be valid**
 
 
+![](2022-02-14-17-14-00.png)
+
+**Should be valid**
+
+![](2022-02-14-17-14-13.png)
+
+**Should be valid**
+
+![](2022-02-14-17-14-32.png)
+
+**Should be invalid**
+
+![](2022-02-14-17-14-52.png)
+
+**Should be invalid**
+
+![](2022-02-14-17-15-30.png)
+
+**Should be invalid**
+
+![](2022-02-14-17-15-58.png)
+
+**Should be invalid**
+
+
+## Thinking about our logical solution
+
+Let's think about how to validate the following binary search tree:
+
+![](2022-02-14-17-20-44.png)
+
+Let's ask the first question:
+
+**Should we navigate the tree, and does it matter how we do it?**
+
+When we think about how we validate our tree, there are conidtions that every single node is governed by. There are conditions regarding its children and regarding it in relationship with its parent. So:
+
+1. if a node is the **left child** of its parent, then it **must be smaller** than its parent.
+2. if a node is the **right child** of its parent, then it **must be greater** than its parent.
+
+Knowing this, let's think about how to traverse this tree, to establish this relationship between nodes. 
+
+As usual we have two options:
+
+1. **BSF:** Since it navigates level by level from left to right, we lose the relationship between parent and children, which we definitely need in this case.
+2. **DFS:** Seems better suited for our use case.
+
+Knowing that we need to do **DFS**, we need to consider the three possible **traversal types**:
+
+1. **Pre-Order:** has a pattern of **NLR**, (node-left-right). Seems** to be the only possible traversal type for our use case.
+2. **In-Order:** has a pattern of **LNR** (left-node-right). So if we start traversing, and go all the way to the left before getting the value of our node, we have lost the value of our parent, or of all the values that came before the node at the extreme left end (which is the one we retrieve first).
+3. **Post-Order:** similar as before, has a **LRN** (left-right-node) pattern. So we start traversing, go all the way left, then right, and only then retrieve the value of the node. Again we lose the value of the respective parents, which we need.
+
+**Why is Pre-Order (Node-Left-Right) the adequate traversal type?**
+
+Because, by starting in the root, taking its value first, and only then traversing to the left (and then right), by the time we reach teh first child, we already know what the value of parent node (the root) is.
+
+### Establishing a logical relationship between parent and children nodes
+
+When we do our first step to the left, we expect the first child to have a relationship with the parent, which is that it should be **lesser** than the parent node. And that is it:
+
+![](2022-02-14-17-38-50.png)
+
+If we traverse to the left again, then the only condition that we care about is that this new child should have a value that **is less than it parent:**
+
+![](2022-02-14-17-39-34.png)
+
+However, when we traverse from the `7` to the right, we now care that it should be **lesser than 12 (the root)**, but **greater than 7 (its parent)**.
+
+So now we can notice, that the **less than 12 ( < 12 )** condition persisted when **we navigated right** from the first child on the left. However, when **we navigated left** from the first child to the left (the `7`) the "less than 12" condition got replaced by **less than 7 ( < 7)**. So, only when we switch directions do we see that we have to add a **greater than 7** value, with that 7 being the actual value of the node from where we navigated from.
+
+Up to know we are starting to see a little bit of the pattern, but let's continue to the right to see if we can fully decipher it.
+
+When first going right, we only care that the value of the child **is greater than** `12`, the value of the parent. If we continue going right, we care that the new node **is greater than** `18`. If from the node with value `18` we traverse left, we still want it to **be greater than 12**, but **now we also want it to be less than 18**. 
+
+So now we notice that **when we traverse from right to right, we replace our "greater than" value.** The "greater than" sign persists, but the acutal value than it should be greater than is updated. However, if we change directions, we **keep the previous "greater than" value, but we add a condition in which is must be "lesser than" 18**.
+
+Here we are see a trend in our traversal, and can produce a couple of rules:
+
+- if we go down the same direction, we **persist the previous "greater than" or "lesser than" sign**, but **we update the value** to which we are comparing to. This is because, if we reach a node from its parent, we assume that the parent has to be valid, otherwise we would have stopped traversing when checking for the validity of the parent.
+- if we change directions, we: 
+  - if we change directions from left to right, we **keep the previous "lesser than" value**
+  - if we change directions from right to left, we **keep the previous "greater than" value**
+
+However, we need to extend our tree in order to verify all the rules we need:
+
+![](2022-02-14-18-38-35.png)
+
+After going left, then right, now we go left (from the `9` to the `8`), we are changing directions from right to left, so we should, according to our rules above, **keep the previous "greater than" sign and value** (value of our node -`8`- should be greater than `7`), and **replace the "lesser than" 12 value** with the new value from the parent:
+
+![](2022-02-14-18-48-49.png)
+
+Now, going to the other side of the tree, first we go right, then left, and then changing directions from left to right, we should, according to our rules above, **keep the previous "lesser than" sign and value** (value of our node -`17`- should be lesser than `18`), and **replace the "greater than" 12 value** with the new value from the parent:
+
+![](2022-02-14-18-51-53.png)
+
+
+// TODO: I don't know if the rules posted above are enough. There' more stuff explanied but probably will need more re-recording and understanding. Skipping for now, trying to see if next videos makes it clearer.
+
+However, we have one problem: there are certain traversal nodes in the beginning, if we keep going in the same direction, for whcih we don't have one of the sides of the boundary in which our value must be within.
+
+How can we make our recursive function work without having the full boundary, for greater than and lesser than? We need the two sides of the boundary for traversing down the tree.
+
+## Figuring out our boundaries
+
+Let's start thinking about the left child of our root, which contains a `7`. We know that whenever we go left, we want to persist some value for what it must be greater than. When we make the first step, we don't care what it's greater than, the only condition is that it's lesser than `12`. 
+
+So what' if I start by thinking, what if I set a very small number, starting for example with `-10000`?:
+
+![](2022-02-14-19-06-32.png)
+
+But since we have no idea how deep our tree can go, what if down the tree there's a node with `-10999`? Then when evaluating this node, we will say that it should be greater than `-10000` (and lesser than `7`), and it will fail when it should actually be a valid node.
+
+So the value we want to actually use is `negative infinity`.
+
+![](2022-02-14-19-09-02.png)
+
+So on the first step to the left, we say our node should be **greater than -Infinity and lesser than 12**, and when we step further down left, **we keep the condition that our node should be greater than -Infinity, but now replace the value of our lesser than, to 7**.
+
+The moment that we make a change and shift to the right, we want to replace the negative infinity: and it makes sense, because all we are saying is that, when we go right, the current value being greater than the value of negative infinity is not meaningful, but the current value being greater than its parent (in this case `9`) is. 
+
+So when we go right, we **update the "greater than" value, if the value which we are updating -`7`- is greater than the previous value that we used to compare for "greater than", in this case `-Infinity`**.
+
+When we go again to the right, from `9` to `11`, we see that the value of `9` is greater than the previous value that we used to compare for "greater than", which was `7`. So we update it accordingly, saying that `11` should be greater than `9`.
+
+So here we have figured out a rule:
+
+- **if we go left, keep the previous value to which we are "greater than"**
+- **if we go right, update the value of "greater than" to the current's node value**
+
+So now we have a rule for our **greater than** for all cases!
+
+Now let's try to find an analogous rule for **lesser than**:
+
+- **if we go left, update the value of "lesser than" to the current's node value**
+- **if we go right, keep the previous value to which we are "lesser than"**
+
+And now we have rules for all movements!
+
+Remember that the root will have initially a condition of beign greater than `-Infinity` and lesser than `Infinity`:
+
+![](2022-02-15-09-24-32.png)
+
+## Coding out our solution
+
+```py
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+import math
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+      if not root:
+        return True
+      # First node: start with conditions greater than -Inf and lesser than Inf
+      return self.traverse(root, -math.inf, math.inf)
+      
+    def traverse(self, node, greaterThan, lesserThan):
+      # If we reach the end of a branch, then it is valid
+      if node == None:
+        return True
+    
+      # Test the current node, return False when conditions not met
+      if not (node.val > greaterThan) or not (node.val < lesserThan):
+        return False
+
+      # Call the branches recursively and unite them with an AND: because using AND
+      # short cirucuits a True (False beats a True, and that's what we need)
+      # When going left, replace the lesserThan with the current value
+      # When going right, replace the greaterThan with the current value
+      return self.traverse(node.left, greaterThan, node.val) and self.traverse(node.right, node.val, lesserThan)
+```
+
+What about **time and space complexity**?
+
+In the worst case, we still need to touch every single node, so **time complexity is O(N)**.
+
+In the worst case, in which we have a fully unbalanced tree, with one single branch going all the way to the right or left, the recursion call stack will be the size of the amount of nodes (N), so **space complexity will also be O(N)**.
+
+**T: O(N)**
+**S: O(N)**
