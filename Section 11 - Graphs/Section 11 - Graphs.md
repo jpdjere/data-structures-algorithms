@@ -181,7 +181,10 @@ class Graph:
     self.adjacencyList[node] = []
 
   def addEdge(self, node1, node2):
-    pass
+    # Notice that this graph is undirected,
+    #  so we need to link vertices in both ways
+    self.adjacencyList[node1].push(node2)
+    self.adjacencyList[node2].push(node1)
 
   # Provided helper function
   def showConnections(self):
@@ -211,3 +214,75 @@ graph.addEdge('0', '2')
 graph.addEdge('6', '5')
 graph.showConnections()
 ```
+
+## Graphs Complexity and Pros and Cons
+
+**Pros**
+
+- Good at mapping relationships between data
+- Some data needs to be in graph form, and can't be represented in any other way
+
+**Cons**
+
+- Scaling is hard (lots of computing power, infrastructure)
+
+Space and Time Complexity is difficult to define because there are so many different type of graphs.
+
+## Graph Traversals
+
+The type of traversals that we learned for trees -**BFS and DFS**- can also be used in **graphs**.
+
+For example, if Amazon was building a book recommendation algorithm with a graph, they would **most surely use BFS** since we would be looking at what types of items are most closely related to the product we are about to buy now, or have already bought.
+
+In a Linkedin graph, in order to know which distance I have in the connection with another user we might use **DFS**.
+
+In **DFS for graphs**, we start by traversing one of the connection nodes to our starting point up to their ends (the connections of those initial connections first) before we continue with others.
+
+In **BFS for graphs**, we first traverse all the connecting nodes from our starting point before diving deeper into the children nodes of the starting point's connections.
+
+**Breadth First Search (BFS):** Used to find shortest path between nodes (closest friends on Facebook, similar books on Amazon)
+
+**Depth First Search (DFS):** Used to check if a path between nodes exists, or if an objective node exists.
+
+## BFS in Graphs
+
+The unique aspect about **BFS in graphs** is that it lends itself really nicely to determining the shortest path between any nodes, especially to determining what's the closest node to a chosen node.
+
+![](2022-02-17-21-13-23.png)
+
+**Pros**
+
+- Helps us easily determine the **shortest path** between nodes
+- Better at finding a node **if we know it is close to a starting point node**
+
+**Cons**
+
+- Uses more memory to keep track of parent and children nodes
+  
+## DFS in Graphs
+
+**DFS in graphs** is exactly like solving a maze: a program that attempts to find which path to take. The idea is **to go as deep as you can and when you hit a roadblock or a point where you can't go further, you backtrack and attempt to find a different route.** And then keep backtracking and searching for a different route until you find your objective node or exit the maze.
+
+That's why **we use recursion for DFS:** it implements the idea of backtracking and attempting to find a different route, that is recursive.
+
+**Pros**
+
+- Helps us determine **does the path exist** between nodes. Doesn't tell us the shortest path, but wether it exists.
+- Uses less memory than **BFS**.
+
+**Cons**
+
+- Can get slow with a very deep graph, as the recursive stack call can get pretty big.
+
+## Dijkstra + Bellman-Ford Algorithms
+
+The **Dijkstra** and the **Bellman-Ford** algorithms are used to solve the **shortest path problem**.
+
+But why would we use them if we just said that **BSF** is used for finding the shortest path? 
+
+These algorithms are used for a special case: yes, **BSF** is used to solve the shortest path problem, but there's one thing that it can't do: it cannot handle **weighted graphs**. (For example, graphs in Google Maps have values for edges representing traffic. A simple BSF cannot account for that.)
+
+If in an interview someone asks about a problem like this, the solution should be implemented using **Djikstra** or **Bellman-Ford** algorithms. Both algorithms are quite complex and lengthy.
+
+The main difference between them is that the **Bellman-Ford** algorithm can accomodate for **negative numbers** in the weight of the edges. **Dijkstra's** algorithm can't but it is still used because it is somewhat faster: **Bellman-Ford**'s algorithm **has a worst-case time complexity of O(N^2)**.
+
