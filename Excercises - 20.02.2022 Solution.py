@@ -5,10 +5,43 @@ Create a function that reverses a string it gets as an input.
 '''
 
 def reverse(text):
+    return "".join(list(text)[::-1])
+
+
 
 #> Arrays: Merge Sorted Arrays
 
+arr1 = [3,4,6,7,9,9,9,20]
+arr2 = [1,2,5,6,21]
 def mergeSortedArrays(arr1, arr2):
+  i = j = 0
+
+  len1 = len(arr1)
+  len2 = len(arr2)
+
+  res = []
+
+  while i < len1 and j < len2:
+    if arr1[i] <= arr2[j]:
+      res.append(arr1[i])
+      i += 1
+    else:
+      res.append(arr2[j])
+      j += 1
+
+  while j < len2:
+    res.append(arr2[j])
+    j += 1
+
+  while i < len1:
+    res.append(arr1[i])
+    i += 1
+
+  return res
+
+print(mergeSortedArrays(arr1, arr2))
+
+
 
 #> Arrays: Two Sum
 
@@ -47,8 +80,17 @@ Constraints:
 Only one valid answer exists.
 ```
 '''
-
 def twoSum(arr, target):
+  seen = {}
+  for idx, val in enumerate(arr):
+    complement = target - val
+    if complement in seen:
+      return [seen[complement], idx]
+    else:
+      seen[val] = idx
+  return False
+
+print(twoSum([2, 7, 11, 15], 9))
 
 
   
@@ -116,11 +158,41 @@ Constraints:
 1 <= nums.length <= 105
 -104 <= nums[i] <= 104
 ```
-˚˝˝˚
 
 '''
 
 def maxSubArray(nums):
+  max_so_far = max_ending_here = nums[0]
+
+  for i in range(1, len(nums)):
+    max_ending_here = max(max_ending_here + nums[i], nums[i])
+    max_so_far = max(max_so_far, max_ending_here)
+
+  return max_so_far
+
+nums = [-2,1,-3,4,-1,2,1,-5,4]
+print(maxSubArray(nums))
+
+def maxSubArray(nums):
+  start = end = 0
+  max_so_far = max_ending_here = nums[0]
+
+  for i in range(1, len(nums)):
+    # Two things might happen on each element:
+    # Did I find a new beginning for maxSubArray?
+    if nums[i] > max_ending_here + nums[i]:
+      start = end = i
+    # Else: did I find a new global maximum?
+    elif max_ending_here + nums[i] > max_so_far:
+      end = i
+    
+    max_ending_here = max(max_ending_here + nums[i], nums[i])
+    max_so_far = max(max_so_far, max_ending_here)
+
+  return [start, end, max_so_far]
+
+nums = [5,4,-1,7,8]
+print(maxSubArray(nums))
 
 
 
@@ -153,7 +225,22 @@ Constraints:
 '''
 
 def moveZeroes(self, nums: List[int]) -> None:
+  nonZero = []
+  for i in nums:
+    if i != 0:
+      nonZero.append(i)
+  
+  for j in range(0,len(nonZero)):
+    nums[j] = nonZero[j]
 
+  for k in range(len(nonZero), len(nums)):
+    nums[k] = 0
+
+  print(nums)
+
+# nums = [0,1,0,3,12]
+nums = [-5,3,0 ,0,0,0,3,4,5,6,0,3,0]
+moveZeroes(nums)
 
 
 
@@ -229,7 +316,23 @@ n == height.length
 
 '''
 
+# area = min(a,b) * (b - a)
 def containerWithGreatestArea(arr):
+  a = 0
+  b = len(arr) - 1
+  maxArea = 0
+  while a != b:
+    area = min(arr[a], arr[b]) * (b - a)
+    if area > maxArea:
+      maxArea = area
+    if arr[a] <= arr[b]:
+      a += 1
+    else:
+      b -= 1
+  return maxArea
+
+nums = [1,8,6,2,5,4,8,3,7]
+print(containerWithGreatestArea(nums))
 
 
 
@@ -262,7 +365,35 @@ Example 3, 4, 5 and 6:
 
 [3, 4, 3] -> 0
 '''
+
+# water on current element = max(maxHeightLeft, maxHeightRight) - currentHeight
 def trappingRainwater(heights):
+    a = 0
+    b = len(heights) - 1
+    maxLeft = maxRight = 0
+    trappedWater = 0
+    while a != b:
+        if heights[a] < heights[b]:
+            # If our current height is less than the maxLeft, we have
+            # a wall to our left, that allows us to accumulate water
+            if heights[a] < maxLeft:
+                water = max(maxLeft, maxRight) - heights[a]
+                trappedWater += water if water > 0 else 0
+            else:
+                maxLeft = heights[a]
+            a += 1
+        else:
+            if heights[b] < maxRight:
+                water = max(maxLeft, maxRight) - heights[b]
+                trappedWater += water if water > 0 else 0
+            else:
+                maxRight = heights[b]
+            b -= 1
+    return trappedWater
+
+nums = [0, 1, 0, 2, 1, 0, 3, 1, 0, 1, 2]
+print(trappingRainwater(nums))
+
 
 
 

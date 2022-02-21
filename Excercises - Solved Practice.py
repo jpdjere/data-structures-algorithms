@@ -626,33 +626,46 @@ Given numbers M, N, reverse only nodes M through N of a linked list.
 1 -> 2 -> 5 -> 4 -> 3 -> 6 -> 7
 """
 def reverseBetweenLeftRight(head, left, right):
-  counter = 1
-  currentItem = previousLeft = head
-  while counter < left:
-    previousLeft = currentItem
-    currentItem = currentItem.next
-    counter += 1
+  currentPosition = 1
+  currentNode = start = head
 
-  first = startOfReversedPart = currentItem
+  # Iterate until currPosition gets to L
+  # Get "start" to be node at position L - 1
+  while currentPosition < left:
+    start = currentNode
+    currentNode = currentNode.next
+    currentPosition += 1
+
+  # We know that the new tail of our reversed part
+  # is my current head, or rather the node I'm 
+  # standing on now. Save it for later
+  first = newReversedTail = currentNode
   second = first.next
-  while counter >= left and counter <= right:
-    afterSecond = second.next
+  while currentPosition >= left and currentPosition < right:
+    followSecond = second.next
 
     second.next = first
 
     first = second
-    second = afterSecond
-  
-    counter += 1
+    second = followSecond
 
-  beginOfReversedPart = first
-  afterRight = second
+    currentPosition += 1
 
-  previousLeft.next = beginOfReversedPart
-  startOfReversedPart.next = afterRight
+  # At the end of the loop as written above,
+  # "second" will be the first Node after the
+  # part of the LL that had to be reversed,
+  # in this case, it is Node 6
+  # "first" will be the last node of my reversed
+  # string, my new tail, which is Node 5.
 
+  # Now we have to reassemble the linked list:
+  start.next = first
+  newReversedTail.next = second
+
+  # Check special case in which left is 1,
+  # then the start of our LL is actually first
   if left == 1:
-    return beginOfReversedPart
+    return first
   return head
 
 
@@ -823,7 +836,38 @@ Input: s = "(]"
 Output: false
 """
 def isValid(self, s: str) -> bool:
+  if len(string) === 0:
+    return True
 
+  opening = ["{", "[", "("]
+  closing = ["}", "]", ")"]
+
+  stack = []
+  for i in string:
+    if i in opening:
+      stack.append(i)
+      continue
+
+    last = stack[len(stack) - 1]
+    if i in closing:
+      if len(stack) === 0:
+        return False
+
+      if last === opening[0] and i === closing[0]:
+        stack.pop()
+        continue
+      if last === opening[1] and i === closing[1]:
+        stack.pop()
+        continue
+      if last === opening[2] and i === closing[2]:
+        stack.pop()
+        continue
+
+      return False
+
+  if len(stack) === 0:
+    return True
+  return False
 
 
 # Stacks: Minimum Remove to Make Valid Parentheses (Medium)
@@ -861,4 +905,61 @@ Constraints:
 1 <= s.length <= 105
 s[i] is either'(' , ')', or lowercase English letter.
 """
+## Approach 1
+
 def minRemoveToMakeValid(self, s: str) -> str:
+  # Check base case of empty string
+  if len(s) == 0:
+      return s
+  parsedStr = list(s)
+  left = []
+  right = []
+  for idx, val in enumerate(parsedStr):
+    # If opening parenthesis, we need only to
+    # add to the stack the current position, as
+    # we'll have to remove it later
+    if val == '(':
+        left.append(idx)
+    if val == ')':
+        # If we find a ')' but there's no previous
+        # opening '(' (left is empty), add the index
+        # to the left stack, marking it to be removed later
+        if len(left) == 0:
+            right.append(idx)
+        # Instead, if there is a matching opening pair, 
+        # remove that opening pair from left
+        else:
+            left.pop()
+  # Create a new list excluding indeces from left and right and join it
+  newList = [value for idx, value in enumerate(parsedStr) if idx not in (left + right)]
+  return "".join(newList)
+
+
+
+## Approach 2
+
+def minRemoveToMakeValid(self, s: str) -> str:
+  # Check base case of empty string
+  if len(s) == 0:
+      return s
+  parsedStr = list(s)
+  stack = []
+  for idx, val in enumerate(parsedStr):
+    # If opening parenthesis, we need only to
+    # add to the stack the current position, as
+    # we'll have to remove it later
+    if val == '(':
+        stack.append(idx)
+    if val == ')':
+        # If we find a ')' but there's no previous
+        # opening '(' (stack is empty), replace the
+        # current char for a an empty string
+        if len(stack) == 0:
+            parsedStr[idx] = ""
+        # Instead, if there is a matching opening pair, 
+        # remove that opening pair from stack
+        else:
+            stack.pop()
+  # Create a new list excluding indeces from left and right and join it
+  newList = [value for idx, value in enumerate(parsedStr) if idx not in stack]
+  return "".join(newList)

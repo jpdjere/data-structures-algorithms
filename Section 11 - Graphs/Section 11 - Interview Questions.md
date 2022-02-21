@@ -156,23 +156,24 @@ This is a very familiar pattern of traversal, since we have already done it with
 Let's first represent our graph as an **adjacency list**:
 
 ```py
-  graph = [
-    [1, 3],
-    [0],
-    [3, 8],
-    [0, 2, 3, 5],
-    [3, 6],
-    [3],
-    [4, 7],
-    [6],
-    [2]
-  ]
+graph = [
+  [1, 3],
+  [0],
+  [3, 8],
+  [0, 2, 4, 5],
+  [3, 6],
+  [3],
+  [4, 7],
+  [6],
+  [2]
+]
 ```
 
 Now let's think how to code out our **BFS**.
 
 Here, in the context of our **BFS** we are going to receive the **adjacency list** that represents our entire graph. So when we define our traversal function, we are going to have the **adjacency list** as a parameter:
 
+## With Adjacency List
 ```py
   def traversalBFS(self, graph): # graph has the shape of our adj list
     # We first initialize our queue, with our initial value
@@ -199,6 +200,38 @@ Here, in the context of our **BFS** we are going to receive the **adjacency list
       for n in connections:
         if n not in seen:
           q.append(n)
+    
+    # Return our res array
+    return res
+```
+
+## With Adjacency Matrix
+```py
+  def traversalBFS(self, graph): # graph has the shape of our adj list
+    # We first initialize our queue, with our initial value
+    q = [0]
+    # We also initialize our res array which will keep our values once processed
+    res = []
+    # We also need an object to keep track of the nodes that we have already
+    # explored, so that we don't re-add them to the queue
+    seen = {}
+
+    # The while loop will drive our algorithm, with the usual condition of
+    # looping while our queue has elements in it
+    while len(q) > 0:
+      # Pop the first value of the queue to begin processing it
+      node = q.pop(0)
+      # Add it to our res array
+      res.append(node)
+      # Track that we have already seen this node
+      seen[node] = True
+
+      # Get all nodes that are connected to our current node
+      connections = graph[node]
+      # Loop over each of them and add it to the queue if we haven't seen it before
+      for index, n in enumerate(connections):
+        if n == 1 and index not in seen:
+          q.append(index)
     
     # Return our res array
     return res
@@ -263,3 +296,58 @@ Since `8` is finished, has no further neighbours, we go back to `2`, whose neigh
 So that means that the **DFS** is done.
 
 ## Coding DFS
+
+### With Adjaceny List
+```py
+def traversalBFS(graph): # graph has the shape of our adj list
+  if graph is None:
+    return []
+
+  # Create an array in which to store our results
+  res = []
+  # Create a seen object to save seen nodes
+  seen = {}
+  # Start the recursion passing down the first node
+  recursiveTraverse(0, graph, res, seen)
+  return res
+
+def recursiveTraverse(node, graph, res, seen):
+  # Append the node passed
+  res.append(node)
+  # Add it to the seen objecto
+  seen[node] = True
+  # Get the nodes neighbours
+  neighbours = graph[node]
+  # Loop over them and start the recursion if not in seen
+  for n in neighbours:
+    if n not in seen:
+      recursiveTraverse(n, graph, res, seen)
+```
+
+### With Adjaceny Matrix
+```py
+def traversalBFS(graph): # graph has the shape of our adj matrix
+  if graph is None:
+    return []
+
+  # Create an array in which to store our results
+  res = []
+  # Create a seen object to save seen nodes
+  seen = {}
+  # Start the recursion passing down the first node
+  recursiveTraverse(0, graph, res, seen)
+  return res
+
+def recursiveTraverse(node, graph, res, seen):
+  # Append the node passed
+  res.append(node)
+  # Add it to the seen object
+  seen[node] = True
+  # Get the nodes neighbours
+  neighbours = graph[node]
+  # Loop over them and start the recursion if not in seen
+  for n, val in enumerate(neighbours):
+    if val == 1:
+      if n not in seen:
+        recursiveTraverse(n, graph, res, seen)
+```

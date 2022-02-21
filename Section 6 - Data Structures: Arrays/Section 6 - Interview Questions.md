@@ -714,7 +714,7 @@ How can we apply this knowledge to our two pointers?
 
 Having the two pointers at the extremes, with data to know if we have a wall in each, what can we derive using them?
 
-Technically, we can't figure anything out, because, when we have our pointers placed so, we know nothing about the content inside the walls formed by those two pointers. The water content can be affected by any other walls inside the container. So we cannot use the poitners to single-handedly figure out how much water would be trapped inside of the walls formed by them.
+Technically, we can't figure anything out, because, when we have our pointers placed so, we know nothing about the content inside the walls formed by those two pointers. The water content can be affected by any other walls inside the container. So we cannot use the pointers to single-handedly figure out how much water would be trapped inside of the walls formed by them.
 
 What we can keep track of are **the maximum values that they have seen respectively for each side**. So as `maxLeft` moves inward we keep track of the maximum value it has seen, and the same with `maxRight` as it moves inwards also.
 
@@ -731,7 +731,7 @@ currentWater = min(maxLeft, maxRight) - currentHeight
 
 we know that it is calculating for some current value which before we represented with some pointer (the i with which we looped through the array in the brute force solution). Now that we don't have that looping pointer any more, we need to have one of the two pointers (which we placed at the extremes) to take the responsability of measuring the currentWater where it is positioned.
 
-We need to get these two ideas together: firstly, our logic still says that we have to moved the pointer with the smaller value inwards, while at the same time we need to use the smaller value as the actual current height to do the calculation. (we'll see why once we step into the logic)
+We need to get these two ideas together: firstly, our logic still says that we have to move the pointer with the smaller value inwards, while at the same time we need to use the smaller value as the actual current height to do the calculation. (we'll see why once we step into the logic)
 
 Let's first initialize a `maxLeft` and a `maxRight` variables with value `0`.
 
