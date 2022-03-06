@@ -413,6 +413,18 @@ Find the first recurring character. The above array should return 2.
 
 '''
 def findFirstRecurring(nums):
+  seen = {}
+  for i in nums:
+    if i not in seen:
+      seen[i] = True
+    else:
+      return i
+  return False
+
+
+# nums = [2, 5, 1, 2, 3, 5, 1, 2, 4]
+nums = [1,2,3,4,5,6,7]
+print(findFirstRecurring(nums))
 
 
 
@@ -436,6 +448,55 @@ class Node:
 
 class LinkedList:
   def reverse(self):
+
+### Full Version
+class LinkedList:
+  def reverse(self):
+    self.head.next = None
+    self.tail = self.head
+
+    first = self.head
+    second = first.next
+
+    # Loop until there's no next to current
+    # which means, first is my last node
+    while second:
+      secondNext = second.next
+
+      second.next = first
+      
+      first = second
+      second = secondNext
+
+    self.head = first
+
+### Leetcode Version
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if head is None:
+            return head
+        
+        first = head
+        second = first.next
+        
+        head.next = None
+
+        # Loop until there's no next to current
+        # which means, first is my last node
+        while second:
+            secondNext = second.next
+
+            second.next = first
+
+            first = second
+            second = secondNext
+
+        return first
 
 #> Linked Lists: M, N reversals (Reverse Linked List II) (Medium)
 """
@@ -474,6 +535,43 @@ The number of nodes in the list is n.
 """
 class Solution:
     def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+      if head is None:
+        return None
+
+      if head.next is None:
+        return head
+
+      counter = 1
+      currentNode = prev = head
+
+      while counter < left:
+        prev = currentNode
+        currentNode = currentNode.next
+        counter += 1
+
+
+      first = initialLeft = currentNode
+      second = first.next
+
+      while counter < right:
+        secondNext = second.next
+
+        second.next = first
+
+        first = second
+        second = secondNext
+
+        counter += 1
+        
+      initialRight = first
+      after = second
+
+      prev.next = initialRight
+      initialLeft.next = after
+
+      if left == 1:
+        return initialRight
+      return head
 
 
 
@@ -537,6 +635,26 @@ class Node:
 """
 class Solution:
     def flatten(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        current = head
+        while current is not None:
+            if current.child is not None:
+                child = current.child
+                child.prev = current
+                nextToParent = current.next
+                current.next = child
+                current.child = None
+
+                currentSubNode = child
+                while currentSubNode:
+                  currentSubNode = currentSubNode.next
+
+                if nextToParent:
+                  currentSubNode.next = nextToParent
+                  nextToParent.prev = currentSubNode
+
+            current = current.next
+      
+        return head
 
 
 #> Linked Lists: Linked List Cycle Detection (Medium)
@@ -583,7 +701,30 @@ class Solution:
 
 ## Approach 2: Floyd's Tortoise and Hare Algorithm
 class Solution:
+class Solution:
     def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if head is None or head.next == None:
+            return None
+        
+        slow = fast = head
+        
+        while True:
+            slow = slow.next
+            fast = fast.next
+            if fast.next == None or fast.next.next == None:
+                return None
+            fast = fast.next
+            
+            if fast == slow:
+                break
+                
+        p1 = head
+        p2 = fast
+        while p1 != p2:
+            p1 = p1.next
+            p2 = p2.next
+            
+        return p1
 
 
 
@@ -612,7 +753,28 @@ Input: s = "(]"
 Output: false
 """
 def isValid(self, s: str) -> bool:
+  symbols = {
+    "{": "}",
+    "(": ")",
+    "[": "]",
+  }
 
+  stack = []
+  for i in s:
+    if i in symbols:
+      stack.append(i)
+      continue
+
+    lastInStack = stack[len(stack) - 1]
+    if i == symbols[lastInStack]:
+      stack.pop()
+    else:
+      return False
+  
+  return True
+
+st = "(){}{(})}"
+print(isValid(st))
 
 
 #> Stacks: Minimum Remove to Make Valid Parentheses (Medium)
@@ -653,9 +815,26 @@ Constraints:
 s[i] is either'(' , ')', or lowercase English letter.
 """
 def minRemoveToMakeValid(self, s: str) -> str:
+  strList = list(s)
+  stack = []
+  for idx, char in enumerate(strList):
+    if char == ")" and not stack:
+      strList[idx] = ""
+    elif char == ")":
+      stack.pop()
+    elif char == "(":
+      stack.append(idx)
+
+  return "".join([c for idx, c in enumerate(strList) if idx not in stack ])
 
 
+"lee(t(c)o)de)"
 
+"a)b(c)(d"
+
+"a()b"
+
+"))(("
 
 #> Trees: Maximum Depth of Binary Tree (Easy)
 """
@@ -675,7 +854,14 @@ to the furthest leaf node.
 #         self.right = right
 """
 class Solution:
+class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
+        return self.recursiveDepth(root, 0)
+    def recursiveDepth(self, node, count):
+        if node is None:
+            return count
+        count += 1
+        return max(self.recursiveDepth(node.left, count), self.recursiveDepth(node.right, count))
 
 
 # Trees: Invert a Binary Tree (Easy)
@@ -693,6 +879,16 @@ Given the root of a binary tree, invert the tree, and return its root.
 """
 class Solution:
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        self.recursiveInvert(root)
+        return root
+     
+    def recursiveInvert(self, node):
+        if node is None:
+            return
+        
+        node.left, node.right = node.right, node.left
+        self.recursiveInvert(node.left)
+        self.recursiveInvert(node.right)
 
 
 
@@ -726,6 +922,30 @@ Output: []
 """
 class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+      if root == None:
+        return []
+    
+      res = []
+      levelNodes = []
+      q = [root]
+      counter = len(q)
+    
+      while len(q) > 0:
+        counter -= 1
+        current = q.pop(0)
+        levelNodes.append(current.val)
+        
+        if current.left:
+            q.append(current.left)     
+        if current.right:
+            q.append(current.right)
+        
+        if counter == 0:
+            res.append(levelNodes)
+            levelNodes = []
+            counter = len(q)
+            
+      return res
 
 
 #> Trees: Binary Tree Right Side View (Medium)
@@ -759,9 +979,29 @@ class TreeNode:
 """
 class Solution:
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
-
-
-
+        if root == None:
+            return []
+        res = []
+        q = [root]
+        levelNodes = []
+        counter = len(q)
+        
+        while len(q) > 0:
+            counter -= 1
+            current = q.pop(0)
+            levelNodes.append(current.val)
+            if current.left:
+                q.append(current.left)
+            if current.right:
+                q.append(current.right)
+            
+            if counter == 0:
+                res.append(levelNodes.pop())
+                levelNodes = []
+                counter = len(q)
+        
+        return res
+            
 
 
 

@@ -313,9 +313,10 @@ https://leetcode.com/problems/reverse-linked-list-ii/
 Given numbers M, N, reverse only nodes M through N of a linked list.
 [1, 2, 3, 4, 5] M = 2, N = 4
 --> [1, 4, 3, 2, 5]
-     p    L         R    a
-1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 
-1 -> 2 -> 5 -> 4 -> 3 -> 6 -> 7
+
+1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7    M = 3   N = 5    ----->
+1 -> 2 -> 5 -> 4 -> 4 -> 6 -> 7    
+
 
 Given the head of a singly linked list and two integers left and right where left <= right, 
 reverse the nodes of the list from position left to position right, and return 

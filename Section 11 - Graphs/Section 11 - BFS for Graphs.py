@@ -14,7 +14,7 @@ def traversalBFS(graph): # graph has the shape of our adj list
 def recursiveTraverse(node, graph, res, seen):
   # Append the node passed
   res.append(node)
-  # Add it to the seen objecto
+  # Add it to the seen object
   seen[node] = True
   # Get the nodes neighbours
   neighbours = graph[node]

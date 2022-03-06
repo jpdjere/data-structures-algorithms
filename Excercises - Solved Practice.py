@@ -963,3 +963,150 @@ def minRemoveToMakeValid(self, s: str) -> str:
   # Create a new list excluding indeces from left and right and join it
   newList = [value for idx, value in enumerate(parsedStr) if idx not in stack]
   return "".join(newList)
+
+
+#> Check if a Parentheses String Can Be Valid (Medium)
+
+"""
+A parentheses string is a non-empty string consisting only of '(' and ')'. It is valid if any of the following conditions is true:
+
+- It is ().
+- It can be written as AB (A concatenated with B), where A and B are valid parentheses strings.
+- It can be written as (A), where A is a valid parentheses string.
+
+You are given a parentheses string s and a string locked, both of length n. locked is a binary string consisting only of '0's and '1's.
+For each index i of locked,
+
+- If locked[i] is '1', you cannot change s[i].
+- But if locked[i] is '0', you can change s[i] to either '(' or ')'.
+
+Return true if you can make s a valid parentheses string. Otherwise, return false.
+
+Example 1:
+Input: s = "))()))", locked = "010100"
+Output: true
+Explanation: locked[1] == '1' and locked[3] == '1', so we cannot change s[1] or s[3].
+We change s[0] and s[4] to '(' while leaving s[2] and s[5] unchanged to make s valid.
+
+Example 2:
+Input: s = "()()", locked = "0000"
+Output: true
+Explanation: We do not need to make any changes because s is already valid.
+
+Example 3:
+Input: s = ")", locked = "0"
+Output: false
+Explanation: locked permits us to change s[0]. 
+Changing s[0] to either '(' or ')' will not make s valid.
+"""
+
+# Input: s = "))()))", locked = "010100"
+
+# Approach 1
+
+# The idea is to check if parentheses are balanced from left to right and from right to left.
+class Solution:
+    def canBeValid(self, s: str, locked: str) -> bool:
+      # String can only be valid if it is even - () should close with each other
+      if len(s) % 2 != 0:
+        return False
+      
+      balance = 0
+      for i in range(0, len(s)):
+        # Add to the balance when parenthesis is opening
+        if s[i] == "(":
+          balance += 1
+        # Add to the balance when parenthesis is closed, but can be reversed
+        elif locked[i] == "0": # It is unlocked
+          balance += 1
+        # Substract from balance otherwise
+        elif s[i] == ")":
+          balance -= 1
+        if balance < 0:
+          return False
+      
+      balance = 0
+      for i in range(len(s) - 1, -1, -1):
+        if s[i] == ")":
+          balance +=1
+        elif locked[i] == "0": # Is open
+          balance += 1
+        elif s[i] == "(":
+          balance -=1
+        if balance < 0:
+          return False
+      
+      return True
+
+## Approach 2
+"""
+We are interested in the number of brackets which are locked and cannot be modified.
+
+First we traverse the string from left to right and check the following
+
+1. The chars which are unlocked.
+2. The chars which are locked and are open brackets.
+3. The chars which are locked and are closed brackets.
+4. We need to identify the number of locked brackets which are unpaired, which is equal to number of closed brackets - number of open brackets.
+5. Now the only way to balance these locked, unpaired brackets is by modifying the unlocked ones. So we check if the number of unlocked > unpaired. If it is not, then balancing is not possible and we return false.
+
+Similarly we traverse the string from right to left and check for this condition unlocked > unpaired, which is (number of open brackets - number of closed brackets) in this case.
+"""
+class Solution:
+    def canBeValid(self, s: str, locked: str) -> bool:
+      if len(s) % 2 != 0:
+        return False
+      
+      opened, closed, unlocked = 0, 0, 0
+      for i in range(0, len(s)):
+        if locked[i] == "0":
+          unlocked += 1
+        elif s[i] == "(":
+          opened += 1
+        elif s[i] == ")":
+          closed += 1
+        unbalanced = closed - opened
+        if unlocked < unbalanced:
+          return False
+      
+      opened, closed, unlocked = 0, 0, 0
+      for i in range(len(s) - 1, -1, -1):
+        if locked[i] == "0":
+          unlocked += 1
+        elif s[i] == ")":
+          opened += 1
+        elif s[i] == "(":
+          closed += 1
+        unbalanced = closed - opened
+        if unlocked < unbalanced:
+          return False
+      
+      return True
+      
+# Approach 3 (similar to Approach 1)
+"""
+The key here is treating all unlocked parentheses as "(" when going forward and
+treating all unlocked parentheses as ")" when going backwards.
+"""
+class Solution(object):
+    def canBeValid(self, s, locked):
+        if len(s) % 2:  # Intuitively, odd-length s cannot be valid.
+            return False
+
+        # traverse each parenthesis forward, treat all unlocked Parentheses as'(' and check if there is ')'
+        # that cannot be eliminated by previous '(', if it exists, then the input s can't be valid.
+        balance = 0
+        for i in range(len(s)):
+            balance += 1 if s[i] == '(' or locked[i] == '0' else -1
+            if balance < 0:
+                return False
+
+        # traverse each parenthesis backward, treat all unlocked Parentheses as')' and check if there is '('
+        # that cannot be eliminated by previous ')', if it exists, then the input s can't be valid.
+        balance = 0
+        for i in range(len(s) - 1, -1, -1):
+            balance += 1 if s[i] == ')' or locked[i] == '0' else -1
+            if balance < 0:
+                return False
+
+        return True

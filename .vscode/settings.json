@@ -1,0 +1,98 @@
+{
+  "favorites.groups": [
+    "Default",
+    "Section"
+  ],
+  "favorites.currentGroup": "Section",
+  "favorites.resources": [
+    {
+      "filePath": "Excercises.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 11 - Graphs/Section 11 - Interview Questions.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 10 - Trees/Section 10 - Trees.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 6 - Data Structures: Arrays/Section 6 - Interview Questions.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 7 - Data Structures: Hash Tables/Section 7 - Data Structures: Hash Tables.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 3 - Big O/Section3.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 4 - How to Solve Coding Problems/Section 4 - How to Solve Coding Problems.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 5 - Data Structures: Introduction/Section 5 - Data Structures: Introduction.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 6 - Data Structures: Arrays/Section 6 - Data Structures: Arrays.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 8 - Data Structures: Linked Lists/Section 8 - Data Structures: Linked Lists.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 8 - Data Structures: Linked Lists/Section 8 - Interview Exercises.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 9 - Data Structures: Stacks and Queues/Section 9 - Data Structures: Stacks and Queues.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 9 - Data Structures: Stacks and Queues/Section 9 - Interview Questions.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 10 - Trees/Section 10 - Heaps and Priority Queues.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 10 - Trees/Section 10 - Interview Questions.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 11 - Graphs/Section 11 - BFS for Graphs.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 11 - Graphs/Section 11 - DFS for Graphs.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 11 - Graphs/Section 11 - Graphs.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Excercises - 20.02.2022 Solution.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Excercises - LeetCode - Others Solved Practice.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Excercises - Solved Practice.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Section 3 - Big O/Section 3 - Big O.md",
+      "group": "Section"
+    }
+  ],
+  "favorites.sortOrder": "DESC"
+}
