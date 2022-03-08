@@ -1676,6 +1676,351 @@ And finally we pursue our last path: **S**, **B**, **D** and finally **E**, for 
 
 ![](2022-03-06-23-26-14.png)
 
+These are the **five possible paths from S to E** that we can explore based on the decision taken at each node. 
+
+The kind of stree seen in the diagrams above is called a **state-space tree**: it keeps track of what state every vortex is in and what is the decision we made amongst all the possible options of solutions that we have available. 
+
+As you can see, it is a very extensive and time consuming process. And it only gets more complex as more nodes are present in the graph.
+
+However, once we have all the possible solutions, it is very easy to find the optimal solution: in our case, it's the minimum cost, which is `9`.
+
+By the very definition of the **optimization problem**, where we want to find the minimum possible options, or the maximum possible option, the only way we can have 100% accuracy is to calculate every single possible path and then pick the value that is the smallest or the largest - depending on the problem.
+
+Keeping this in mind, what the **greedy method** tries to do is to reduce the amount of time it takes to come to this max or minimum value. What it does, is, at every single point where we have to make a decision, we prioritize the decision that most logically gets me closer to my optimization objective. In this particular example, where we are looking for our least-costly path, then it would mean choosing, at each decision point, the path with the less cost associated to it.
+
+So, following the **greedy method**, we would choose the path **S -> B -> D -> E**, which has a total associated cost of `17`, and as we can see, is not the optimal solution, i.e., the path with the least cost. This is where the **greedy method** falls short. 
+
+**Dynamic programming**, on the other hand, recognizes that **the only way we can be 100% sure that we have the right answer is building the complete state-space tree and exploring every possible path**. 
+
+However, were it tries to improve in the time it takes to build this tree is that **we repeat a lot of work when every path is explored.** 
+
+For example, we see that we end up repeating the **C -> E** calculation:
+
+![](2022-03-06-23-40-46.png)
+
+We also end up repeating the **C -> D -> E** calculation:
+
+![](2022-03-06-23-41-35.png)
+
+We even repeat **D -> E** calculation three different times:
+
+![](2022-03-06-23-42-09.png)
+
+This is significant because we know each of this calculations represent the same amount of work. If we find a way of not having to do all this work again, once we have already done it, then we can save ourselves any additional consumptions cycles that these processes take,
+
+And this is what **dynamic programming aims to do:** it sees taht there is repeated work and we therefore should store the value or result of these repeating units of work, so that if we ever come to this work again we don't have to re-do the work, and we can simplky fetch the previously saved results. 
+
+The process of saving these values is known as **memoization**.
+
+The key to dynamic programming is recognizing what do we need to memoize. 
+
+At this point, what we can see is that from **node C**, in the context of this question, we have explored every possible traversing option that **node C** has:
+
+![](2022-03-06-23-47-08.png)
+
+If we frame it in the context of the **optimization problem**, where we are looking for looking for lowest-costing path, then let's compare all the paths that we calculated in our first two iterations through **node A** - our two most leftward branches in our tree.
+
+What we notice is that right at the end, **C -> D -> E** and **C -> E** are the only two possible options that **C** has left. This means that, when we get the values for this calculations, we know which path is the shortest from **C** to **E**. 
+
+![](2022-03-06-23-51-07.png)
+
+As we can see, it's straight from **C** to **E**, which has a cost of `4`, while **C -> D -> E** has a total cost of `17`. That being the case, what we want to **memoize** is that **if we ever reach node C, then we automatically take -or add- a cost 4**. We shouldn't bother ourselves with exploring any other paths or taking decisions again.
+
+![](2022-03-06-23-54-09.png)
+
+So, where else can we apply that type of **memoization**?
+
+We can see that, the moment we hit **D**, we also have a final value, since the only possible path is straight to **E**, with a cost of `10`. So we memoize that, when reaching **D**, we should take `10`.
+
+![](2022-03-06-23-54-54.png)
+
+So now, if we were to repeat these last three steps instead, the last three branches...:
+
+![](2022-03-06-23-56-01.png)
+
+So at this point in the graph above we have only explored our **A branches**. Along the way, we manged to figure out that we have calculated everything for **C** and for **D** as well, so we have those values memoized on top.
+
+Continuing on, we go from **S** to **B**, which has a cost of `2`:
+
+![](2022-03-06-23-57-40.png)
+
+And here we have to make a decision between going to **C** or to **D**. Let's try both.
+
+We'll go to **C** first, which costs `6`:
+
+![](2022-03-06-23-58-38.png)
+
+And the moment we reach **C**, we check and we see that we have memoized the value for **C**, so w don't need to explore anything, we know that the answer is `4`:
+
+![](2022-03-06-23-59-37.png)
+
+If we were to continue with the other traversal: we have **S** to **B**, and then from **B** to **D**. 
+
+![](2022-03-07-00-00-35.png)
+
+And here, we see that also at **D** we have memoized our value for **D**, so we immediately take the `10`. 
+
+And now we know that the total cost of the second-to-last path was `12` and the last we calculated was `17`:
+
+![](2022-03-07-00-01-52.png)
+
+And now we have all the calculations we needed to choose our right answer. So we notice that `9` is still our shortest path. 
+
+What you see with **dynamic programming** is that we not only **saved ourselves an entire branch of work**, but we also **reduced the amount of work we had to do** for our **B**-branches.
+
+This is what **dynamic programming helps us do**: realize that we still need to calculate all possibilites, but, since many of them are repetitive and repeated work that has already been done, we save our done work and retrieve it later when we would need to calculate it again. 
+
+We save ourselves from doing that work by **reconfiguring the question and thinking in such a way that we can reduce and save ourselves those repeated calculation by storing the correct answers at some points that get repeated in our space-state tree.**
+
+The biggest challenge is recognizing **what we need to store, and why**.
+
+The **why** can usually be reframed from the **optimization problem** question in the whole graph, down to a smaller scale.
+
+In the context of this graph, we trying to figure out a minimization optimization problem. The minimization is the lowest cost path from the starting node to the ending node: if we were to reframe that on a smaller scale, and figure out if there is a repeated step there at every single node, then the question becomes what is the shortest path of all of my options from each node, up to the end node.
+
+Once we figure out all of the paths for **C**, we want to store the shortest path from **C** to **E**. This is just a smaller version of the bigger problem: we are trying to explore all the paths from **S** to **E**, in the same way we are trying to explore all the paths from **C** to **E**.
+
+That is **dynamic programming in a nutshell**.
+
+
+## What is the Bellman-Ford Algorithm? The Algorithm Itself
+
+We're going to learn the algorithm for the following graph:
+
+![](2022-03-07-09-41-18.png)
+
+**Bellman-Ford** is a dynamic programming algorithm, meaning it utilizes DP under the hood to efficently solve an optimization problem. In this case, the optimization problem is a minimization proble, because we are trying to solve, from a single source vertex, what is the shortest distance path -lowest cost- to every other vertex in the graph.
+
+What we are trying to do is figuring out and calculating all of the available paths in the graph to every single node, and that is a very computationally expensive process. But the only way we can we 100% sure that we find the lowest-cost path is if we explore all the possible paths to every possible node. What **DP** with **Bellman-Fordman** attempts to do is to solve some of that computational cycles by saving previously done work through memoization.
+
+What's great about **Bellman-Fordman** is that we don't have to pick what to memoize, **the algorithm takes care of that for us**. And the implementation is remarkably simple.
+
+However, to understand why it's implmented the way it is, let's break it down from the **DP** point of view.
+
+While the algorithm is actually trying to solve the minimization problem of solving the lowest costing path from a source node to all other nodes in the graph, we can reduce that question to finding, from a source node, what is the lower-costing path to any particular randomly-chosen node in the graph. When we say randomly, we actually want to **pick the worst case scenario**.
+
+In the worst-case scenario, what is the most number of edges that we wil traverse through in order to get to a specified vertex? here it would be the furthest-away vertex. 
+
+We also want to **avoid running in cycles** because that's just wasting steps.
+
+Considering those two things, the longest (more amount of edges visited) path from **node 1** to **node 3** is:
+
+**node 1 -> node 4 -> node 2 -> node 5 -> node 3**
+
+Notice that we **are traversing through every single vertex in the graph**. So the relationship is actually defined as **n - 1**, where **n** is the number of nodes in the graph. In a really large graph, taht will still be the case, because in the worst-case, we will only walk through the graph once. The `-1` comes from the fact that we are standing on one of the nodes when we start.
+
+Keeping this in mind, this `n - 1` is how we are able to optimize some of the calculation when figuring out all of these paths. What we want to do is analyze the question even further: if we are trying to find the lowest-cost path to a specific target node, we do need to explore all of the paths available. 
+
+There are `n - 1` edges to path through in the worst-case possible path, but there might be numerous `n - 1` paths. We can imagine the graph could be given to us in a way where one has a direct connection from the starting point to **node 3**, or **1 to 2 to 3**, so there could be numerous different possibilities for the number of steps that we have to take in order to reach the furthest node.
+
+So not only will there be a number of different `n - 1` edge paths to **node 3**, there might be much significantly shorter paths as well. And we want to calculate for all of them. In order for us to optimize the calculations, we want to save some of these results through **memoization**. And want we want to memoize is going to be driven by reducing this question a little further.
+
+We can infer that through all of our traversals we are probably going to walk through the same vertex/nodes numerous times. What we **want to keep track of is the lowest cost up until that point**, because we can then say is, if we have the lowest possible cost to **node 2**, we can, instead of restarting from the starting node again, we can just start from **node 2** and just go through the rest of the different traversals. If we reach **node 5**, we then know the shortest path from **node 1 to 5**, then from **node 5** we continue to whatever other verteces there are. 
+
+So **we are trying to set every node as a new starting point, with a shortest path cost so far associated to it**, starting from **node 1** as the source node. 
+
+And to do that, we are going **to iterate over all of the possible edges that we have, keep track of the lowest cost up to that vertex -so far- and we are going to perform that check `n - 1` times**, for the worst-possible case in which there are `n - 1` edges we need to traverse through in order to get to any particular vertex.
+
+So first we need to set up an array that **keeps track of the lowest cost up to each node**. All elements will have an initial value of `Infinity`, except for our **source node**, which will have a value of `0`, because it costs us nothing when starting from that node:
+
+![](2022-03-07-10-29-27.png)
+
+```py
+[(1, 2), (3, 2), (5, 3), (3, 1), (2, 5), (4, 5), (1, 4), (4, 2)]
+```
+
+So we are going to iterate over the edges above `n - 1` times, performing a check. 
+
+Remember, `n - 1` is equal to `4`, because there are `5` verteces. 
+
+So we are going to start with the first iteration. We start by taking the first directed edge and saying "what's the best way from the source node so far?". We take that value from our `costs` array. We take that value and add it to the cost of the edge. Then we compare that against the target's weight: if it's lesser than the target's weight, then update it with the new value.
+
+So, going for the first edge `(1, 2)`, **node 1**'s current weight is `0`. `0` plus the edge's cost of `9` is `9`. Is `9` less than **node 2** (the target) current weight of `Infinity`? Yes, it is. So we update that in the `costs` array.
+
+![](2022-03-07-12-20-25.png)
+
+Now we do the same for `(3, 2)`. But **node 3** has a current weight of `Infinity`. `Infinity` plus anything else is `Infinity`, so there's now way we can update the cost for **node 3**. On to the next.
+
+We take `(5, 3)`. But **node 5** also has a current value of `Infinity`, so we skip it.
+
+Next, `(3, 1)`. **Node 3** is also currently `Infinity`, so we skip it.
+
+Then, `(2, 5)`. **Node 2** has a weight of `9`, so far. The cost of the edge is `-3`. `9` plus `-3` is `6`. Since `6` is less than `Infinity` (the current cost of the target **node 5**), we update it in the costs array:
+
+![](2022-03-07-12-23-52.png)
+
+We move on to `(4, 5)`. **Node 4** has currently `Infinity` as weight, so we skip it.
+
+Then `(1, 4)`. **Node 1** has a current weight of `0`. The weight of the edge is `2`. For a total of `2`. Since `2` is less than the weight of the **target node 4** (current weight `Infinity`), we update the value:
+
+![](2022-03-07-12-25-48.png)
+
+Next, to the last edge in this loop, `(4, 2)`. **Node 4** has a current weight of `2`. The weight of the edge is `-4`. The sum of those is `-2`. Since `-2` is less than the current cost of the **target node 2**, which is currently `9`, we update it:
+
+![](2022-03-07-12-27-16.png)
+
+And now we have **finished our first iteration**. At this point, some of the nodes might have already the lower possible cost associated with them, but we cannot ensure that yet, so we continue to the next iteration.
+
+We start the **second iteration** with `(1, 2)` again. 
+
+![](2022-03-07-12-28-48.png)
+
+**Node 1** has a current cost of `0`. The cost of the edge is `9`. The sum is `9`, which is more than the current cost of the **target node 2**, which is `-2`. So we left its cost unchanged.
+
+![](2022-03-07-12-29-51.png)
+
+Next, `(3, 2)`. **Node 3**'s current value is `Infinity`, so there's nothing we can do yet.
+
+next, `(5, 3)`. **Node 5**'s current value is `6`, plus `7` from the edge's weight is `13`. Since `13` is less than the current target **node 3**'s cost `Infinity`, we update the `costs` array:
+
+![](2022-03-07-13-37-15.png)
+
+Next, `(3, 1)`, **node 3**'s current value is `13`, the edge's weight is `5`, for a total of `18`. That value is higher than the current cost of the target **node 1**, which is `0`. So we left teh `costs` array unchanged.
+
+Next, `(2, 5)`. **Node 2**'s current value is `-2`. Plus the edge's weight of `-3` we get `-5`, which is less than the curernt value of the **target node 5**, which is `6`. So we update the `costs` array:
+
+![](2022-03-07-13-41-16.png)
+
+Next, `(4, 5)`. **Node 4**'s current cost is `2`. The edge's weight is `6`, for a total of `8`. The **target node 5** has a current value of `-5`, which is less, so we leave it unchanged.
+
+Next, `(1, 4)`. **Node 1**'s current cost is `0`. The edge's weight is `2`, for a total of `2`. The **target node 4** has a cost of `2`, so we don't need to update it.
+
+Next, `(4, 2)`. **Node 4**'s current cost is `2`. The edge's weight is `-4`, for a total of `-2`. The **target node 2** has a current cost of `-2`, which is the same, so we don't need to update it.
+
+And here **we have finished iteration `n = 2`.** Again, we could already have some values in `costs` already in their minimum cost, but we have to iterate over `n - 1` to be 100% sure.
+
+So let's start again with `(1, 2)`. **Node 1**'s current cost is `0`. The edge's weight is `9`, for a total of `9`. The **target node of 2** has a current cost of `-2`. Since that is lower, we don't update our costs array.
+
+Next, `(3, 2)`. **Node 3**'s current cost is `13`. The edge's weight is `3`, for a total of `16`. The **target node of 2** has a current cost of `-2`, so we don't update our costs array.
+
+Next, `(5, 3)`. **Node 5**'s current cost is `-5`. The edge's weight is `7`, for a total of `2`. The **target node of 3** has a current weight of `13`. Since our calculated cost of `2` is lower than `13`, we update our `costs` array:
+
+![](2022-03-07-13-57-36.png)
+
+Next, `(3, 1)`. **Node 3**'s current cost is `2`. The edge's weight is `5`, for a total of `7`. The **target node of 1** current cost is `0`, which is less, so the `costs` array stays unchanged.
+
+Next, `(2, 5)`. **Node 2**'s current cost is `-2`. The edge's weight is `-3` for a total of `-5`. The **target node of 5** has a current cost of `-5`. Being the same, we don't need to update the array.
+
+Next, `(4, 5)`. **Node 4**'s current cost is `2`. The edge's weight is `6`, for a total of `8`. The **target node of 5** has a current cost of `-5`. So the array doesn't get updated.
+
+Next, `(1, 4)`. **Node 1**'s current cost is `0`. The edge's weight is `2`, for a total of `2`. The **target node of 4** has a current cost of `2`, so the array stays unchanged.
+
+Next, `(4, 2)`. **Node 4**'s current cost is `2`. The edge's weight is `-4`, for a total of `-2`. The **target node of 2** has a current cost of `-2`. so the array stays unchanged. 
+
+So now we **have completed our 3rd iteration.** Let's move forward to our **4th and final iteration.**
+
+We start again with `(1, 2)`. **Node 1**'s current cost is `0`. The edge's weight is `9`, for a total of `9`. The **target node of 2** has a current cost of `-2`. Since that is lower, we don't update our costs array.
+
+Next, `(3, 2)`. **Node 3**'s current cost is `2`. The edge's weight is `3`, for a total of `5`. The **target node of 2** has a current cost of `-2`, so we don't update our costs array.
+
+Next, `(5, 3)`. **Node 5**'s current cost is `-5`. The edge's weight is `7`, for a total of `2`. The **target node of 3** has a current weight of `2`. Since our calculated cost of `2`, so we don't need to update the array. 
+
+Next, `(3, 1)`. **Node 3**'s current cost is `2`. The edge's weight is `5`, for a total of `7`. The **target node of 1** current cost is `0`, which is less, so the `costs` array stays unchanged.
+
+Next, `(2, 5)`. **Node 2**'s current cost is `-2`. The edge's weight is `-3` for a total of `-5`. The **target node of 5** has a current cost of `-5`. Being the same, we don't need to update the array.
+
+Next, `(4, 5)`. **Node 4**'s current cost is `2`. The edge's weight is `6`, for a total of `8`. The **target node of 5** has a current cost of `-5`. So the array doesn't get updated.
+
+Next, `(1, 4)`. **Node 1**'s current cost is `0`. The edge's weight is `2`, for a total of `2`. The **target node of 4** has a current cost of `2`, so the array stays unchanged.
+
+Next, `(4, 2)`. **Node 4**'s current cost is `2`. The edge's weight is `-4`, for a total of `-2`. The **target node of 2** has a current cost of `-2`, so the array stays unchanged. 
+
+So now we **have finished all our iterations and have got all of our `cost` values for each of our nodes**. This is the **Bellman-Ford algorithm.**
+
+**Bellman-Ford** has also one constraint: **it doesn't work if there is a negative cycle**. 
+
+Let's see what happens if we change the edge `(3, 1)` to `-5`:
+
+![](2022-03-08-00-08-07.png)
+
+Then, the path from **node 1 to node 4** has cost `2`. `2` plus `-4` (traversing to **node 2**) is `-2`. `-2` plus `-3` when traversing to **node 5** is `-5`. And now we add `7` traversing to **node 3**, for a total of `2`. `2` plus `-5`, when traversing back to **node 1** is `-3`, which would mean updating **node 1**'s value of `0` to `-3`. 
+
+But what this means is that now, when we continue checking this cycle, the values in all of the nodes in that cycle will constantly go down, which means that after our 4 iterations the value will keep reducing at each of the nodes inside the negative cycle, for any subsequent iteration.
+
+That's why the **Bellman-Ford** algorithm fails in this case, as it assumes there are no negative cycles. 
+
+But the algorithm also allows us to check for negative cycles within the graph. If the questions asks us to detect the presence of a negative cycle in the graph, we just need to **do `n - 1` iterations over our edges, record the values, and then do iteration `n`**. If any of the values in our `costs` array became lower, that means **there is a negative cycle in our graph**.
+
+## Coding our Solution with Bellman-Ford
+
+A common follow up when working with a **directed weighted graph** is to mention taht the graph can have **negative weights**. Many interviews tend to ask this to see if you know the **Bellman-Ford** algorithm and the constraints that come with it.
+
+If they do this and ask you to solve the problem, you want to make sure to ask if there are **negative cycles in the graph**. Generally, they will they there are not, since they just want to test you knowledge on the **Bellman-Ford** algorithm, and just want it to implement it. 
+
+So let's do that.
+
+The first thing that we want to do is to initialize our `costs` array to keep track of the values as we operate over the steps of the algorithm:
+
+```py
+import math
+
+class Solution:
+  def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+    costs = [math.inf for _ in n]
+    # We initialize our starting node cost to 0, as that is the time it
+    # takes for the signal to reach our starting node
+    costs[k - 1] = 0
+    # Now we just want to iterate n - 1 times over our times array
+    for i in range(n - 1):
+      # Keep track of whether or not the values inside the costs array
+      # have been updated. If all the values have stopped updating before
+      # we reach n - 1, there's no need to continue, it's a waste of cycles
+      # So we use a count variable that increments when a value changes
+      count = 0
+      # Now we loop over our times array 
+      for source, target, weight in times:
+        # Check if the calculated new cost is less than our cost for our
+        # target node. If it is, update it to the new cost
+        newCost = costs[source] + weight
+        if newCost < costs[target]:
+          costs[target] = newCost
+          count = 0
+      # If after iterating through all edges, nothing was updated, we know
+      # that we have already reached our less-cost weight for all nodes
+      # and we can kill the cycle early to avoid cycles
+      if count == 0:
+        break
+    
+    return -1 if max(costs) == Infinity else max(costs)
+```
+
+And that's it. This is the entirety of **Bellman-Ford**'s algorithm, much more simple and straightforward than **Dijikstra**.
+
+Let's now analize space and time complexity:
+
+### Time Complexity
+
+First, generating our `costs` array costs us a time of **N**.
+
+The outer for-loop also iterates at **N - 1**, so that also runs at time of **O(N)**.
+
+Inside that loop, we have another for loop that **iterates over our edges**: **O(E)**.
+
+Since the times of the for-loops gets multiplied, that means we have a final **time complexity of**:
+
+**Time complexity = O(N + N * E) ==> O(N * E)**
+
+### Space Complexity
+
+The only data structure we have is the `costs` array, which has a size of **N**.
+
+**Space complexity = O(N)**
+
+## Contrasting Space and Time Complexity with Dijkstra's a lgorithm
+
+Inisde of our implementation of **Bellman-Ford** we didn't create an adjacency list. Technically, inside **Dijkstra's**  you don't need to do it either, we can leverage the existing `times` array, and we would get rid of the space complexity that comes with creating the adjacency list.
+
+In that sense, the **space complexity is pracitally the same for both algorithms**.
+
+Regarding **time complexity**: the **Bellman-Ford algorithm** accounts for negative weights but the time complexity is **O(N * E)**. Whereas in **Dijkstra's**, the time complexity was **O(N + E log N)** or **O(N + E log E)**, depending how we considered it.
+
+Therefore, **Dijkstra's algorithm** is generally regarded as a faster-running algorithm. It's minor, but it is faster. 
+
+So this is where we need to compare and contrast: if you do not have negative weights inside your directed graph, and you are still solving and optimization minimization problem with a starting point and the shortest path to all nodes, then we should go with **Diijkstra's algorithm**.
+
+If you know there are negative weights, first you want to ask **are there negative cycles?**. If there aren't you can use **Bellman-Ford**. 
+
+If there are, you are probably first going to need to detect their prescence and return some value as an indication that there is a negative cycle, and that it's impossible for the problem to be completed. (Because remember, there's no real answer for the shortest distance, because you will keep running the loop and the value will keep getting smaller with each iteration.)
 
 
 
