@@ -696,7 +696,7 @@ class Solution:
     # inside the checkboard, we can safely return 1 as probability
     if k == 0:
       return 1
-
+    # Check if the dp has the value for our current `k` and cell, and return it if yes
     if dp[k][row][column]:
       return dp[k][row][column]
 
@@ -711,6 +711,7 @@ class Solution:
       # movements, we need to divide by 8
       res += self.knightProbabilityRecursive(n, k - 1, row + x, column + y, dp) / 8.0
     
+    # For the calculated res, save it in the respective `k` and cell
     dp[k][row][column] = res
 
     return res
