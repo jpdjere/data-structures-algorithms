@@ -88,7 +88,7 @@ And we do exactly the same for the other nodes:
 
 The **adjacency matrix** is a very dense data structure, in that it takes a lot of space to store: it will have a size of `N^2`, with `N` being the amount of nodes.
 
-The size of an **adjaceny list** will vary in proportion top how many edges the graph has, but it ends to end up much smaller than the matrix representation.
+The size of an **adjacency list** will vary in proportion top how many edges the graph has, but it ends to end up much smaller than the matrix representation.
 
 ## Breadth First Search in Graphs
 
@@ -297,7 +297,7 @@ So that means that the **DFS** is done.
 
 ## Coding DFS
 
-### With Adjaceny List
+### With Adjacency List
 ```py
 def traversalBFS(graph): # graph has the shape of our adj list
   if graph is None:
@@ -324,7 +324,7 @@ def recursiveTraverse(node, graph, res, seen):
       recursiveTraverse(n, graph, res, seen)
 ```
 
-### With Adjaceny Matrix
+### With Adjacency Matrix
 ```py
 def traversalBFS(graph): # graph has the shape of our adj matrix
   if graph is None:

@@ -1,51 +1,32 @@
-### With Adjaceny List
+#AdjList:
+graph = [
+  [1, 3],
+  [0],
+  [3, 8],
+  [0, 2, 4, 5],
+  [3, 6],
+  [3],
+  [4, 7],
+  [6],
+  [2]
+]
+
+### With Adjacency List
 def traversalBFS(graph): # graph has the shape of our adj list
-  if graph is None:
-    return []
-
-  # Create an array in which to store our results
-  res = []
-  # Create a seen object to save seen nodes
   seen = {}
-  # Start the recursion passing down the first node
-  recursiveTraverse(0, graph, res, seen)
-  return res
-
-def recursiveTraverse(node, graph, res, seen):
-  # Append the node passed
-  res.append(node)
-  # Add it to the seen object
-  seen[node] = True
-  # Get the nodes neighbours
-  neighbours = graph[node]
-  # Loop over them and start the recursion if not in seen
-  for n in neighbours:
-    if n not in seen:
-      recursiveTraverse(n, graph, res, seen)
-
-
-### With Adjaceny Matrix
-def traversalBFS(graph): # graph has the shape of our adj matrix
-  if graph is None:
-    return []
-
-  # Create an array in which to store our results
+  queue = [0]
   res = []
-  # Create a seen object to save seen nodes
-  seen = {}
-  # Start the recursion passing down the first node
-  recursiveTraverse(0, graph, res, seen)
-  return res
 
-def recursiveTraverse(node, graph, res, seen):
-  # Append the node passed
-  res.append(node)
-  # Add it to the seen object
-  seen[node] = True
-  # Get the nodes neighbours
-  neighbours = graph[node]
-  # Loop over them and start the recursion if not in seen
-  for n, val in enumerate(neighbours):
-    if val == 1:
+  while queue:
+    current = queue.pop(0)
+    res.append(current)
+    seen[current] = True
+
+    neighbours = graph[current]
+    for n in neighbours:
       if n not in seen:
-        recursiveTraverse(n, graph, res, seen)
+        queue.append(n)
+  
+  return res
+
+print(traversalBFS(graph))

@@ -701,3 +701,310 @@ The number of nodes in the tree is in the range [1, 104].
 """
 class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
+
+
+#> Find Mode in Binary Search Tree (Easy)
+"""
+https://leetcode.com/problems/find-mode-in-binary-search-tree/
+
+Given the root of a binary search tree (BST) with duplicates, return all the mode(s) (i.e., the most frequently occurred element) in it.
+
+If the tree has more than one mode, return them in any order.
+
+Assume a BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than or equal to the node's key.
+The right subtree of a node contains only nodes with keys greater than or equal to the node's key.
+Both the left and right subtrees must also be binary search trees.
+ 
+Example 1:
+Input: root = [1,null,2,2]
+Output: [2]
+
+Example 2:
+Input: root = [0]
+Output: [0]
+ 
+
+Constraints:
+The number of nodes in the tree is in the range [1, 104].
+-105 <= Node.val <= 105
+ 
+Follow up: Could you do that without using any extra space? (Assume that the implicit stack space incurred due to recursion does not count).
+"""
+class Solution:
+    def findMode(self, root: Optional[TreeNode]) -> List[int]:
+
+
+
+
+
+#> Graphs: Traverse Graph with BFS
+graph = [
+  [1, 3],
+  [0],
+  [3, 8],
+  [0, 2, 4, 5],
+  [3, 6],
+  [3],
+  [4, 7],
+  [6],
+  [2]
+]
+def traversalBFS(graph): # graph has the shape of our adj list
+
+
+#> Graphs: Traverse Graph with DFS
+graph = [
+  [1, 3],
+  [0],
+  [3, 8],
+  [0, 2, 4, 5],
+  [3, 6],
+  [3],
+  [4, 7],
+  [6],
+  [2]
+]
+def traversalDFS(graph): # graph has the shape of our adj list
+
+
+
+
+
+
+#> Graphs: Time Needed to Inform All Employees (Medium)
+"""
+https://leetcode.com/problems/time-needed-to-inform-all-employees/
+
+A company has n employees with a unique ID for each employee from 0 to n - 1. 
+The head of the company is the one with headID.
+
+Each employee has one direct manager given in the manager array where manager[i] 
+is the direct manager of the i-th employee, manager[headID] = -1. 
+Also, it is guaranteed that the subordination relationships have a tree structure.
+
+The head of the company wants to inform all the company employees of an urgent piece of news. 
+He will inform his direct subordinates, and they will inform their subordinates, and so on 
+until all employees know about the urgent news.
+
+The i-th employee needs informTime[i] minutes to inform all of his direct subordinates
+(i.e., After informTime[i] minutes, all his direct subordinates can start spreading the news).
+
+Return the number of minutes needed to inform all the employees about the urgent news.
+
+**Example 1:**
+
+Input: n = 1, headID = 0, manager = [-1], informTime = [0]
+Output: 0
+Explanation: The head of the company is the only employee in the company.
+
+**Example 2:**
+![](2022-03-01-16-34-35.png)
+Input: n = 6, headID = 2, manager = [2,2,-1,2,2,2], informTime = [0,0,1,0,0,0]
+Output: 1
+
+Explanation: The head of the company with id = 2 is the direct manager of all the employees in the company and needs 1 minute to inform them all.
+The tree structure of the employees in the company is shown.
+ 
+Constraints:
+
+1 <= n <= 105
+0 <= headID < n
+manager.length == n
+0 <= manager[i] < n
+manager[headID] == -1
+informTime.length == n
+0 <= informTime[i] <= 1000
+informTime[i] == 0 if employee i has no subordinates.
+It is guaranteed that all the employees can be informed.
+"""
+class Solution:
+    def numOfMinutes(self, n: int, headID: int, manager: List[int], informTime: List[int]) -> int:
+
+
+
+
+
+
+
+
+
+
+#> Graphs: Course Scheduler (Medium)
+"""
+https://leetcode.com/problems/course-schedule/
+
+There are a total of `numCourses` courses you have to take, labeled from `0` to `numCourses - 1`. 
+You are given an array `prerequisites` where `prerequisites[i] = [ai, bi]` indicates that you must
+take course `bi` first if you want to take course `ai`.
+
+For example, the pair `[0, 1]`, indicates that to take course `0` you have to first take course `1`.
+
+Return `true` if you can finish all courses. Otherwise, return `false`.
+
+**Example 1:**
+
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: true
+Explanation: There are a total of 2 courses to take. 
+To take course 1 you should have finished course 0. So it is possible.
+
+**Example 2:**
+
+Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+Output: false
+Explanation: There are a total of 2 courses to take. 
+To take course 1 you should have finished course 0, and to take course 0 you should also have finished course 1. So it is impossible.
+ 
+**Constraints:**
+```
+1 <= numCourses <= 105
+0 <= prerequisites.length <= 5000
+prerequisites[i].length == 2
+0 <= ai, bi < numCourses
+All the pairs prerequisites[i] are unique.
+```
+"""
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+
+
+
+
+#> Graphs: Network Time Delay (Medium)
+"""
+https://leetcode.com/problems/network-delay-time/
+
+You are given a network of n nodes, labeled from `1` to `n`. 
+You are also given times, a list of travel times as directed edges `times[i]` = `(ui, vi, wi)`,
+where `ui` is the source node, `vi` is the target node, and `wi` is the time it takes for a signal
+to travel from source to target.
+
+We will send a signal from a given node `k`. Return the time it takes for all the `n` nodes
+to receive the signal. If it is impossible for all the `n` nodes to receive the signal, return `-1`.
+
+**Example 1:**
+![](2022-03-04-10-22-30.png)
+Input: times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2
+Output: 2
+
+**Example 2:**
+Input: times = [[1,2,1]], n = 2, k = 1
+Output: 1
+
+**Example 3:**
+Input: times = [[1,2,1]], n = 2, k = 2
+Output: -1
+
+**Constraints:**
+```
+1 <= k <= n <= 100
+1 <= times.length <= 6000
+times[i].length == 3
+1 <= ui, vi <= n
+ui != vi
+0 <= wi <= 100
+All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
+```
+"""
+class Solution:
+  def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+
+
+
+
+
+
+#> Graphs: Network Time Delay WITH NEGATIVE WEIGHTS (Medium)
+class Solution:
+  def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+
+
+
+
+
+
+
+
+
+
+
+#> Dynamic Programming: Minimum Cost of Climbing Stairs (Easy)
+"""
+https://leetcode.com/problems/min-cost-climbing-stairs/
+
+You are given an integer array cost where cost[i] is the cost of ith step on a staircase. 
+Once you pay the cost, you can either climb one or two steps.
+
+You can either start from the step with index 0, or the step with index 1.
+
+Return the minimum cost to reach the top of the floor.
+
+**Example 1:**
+Input: cost = [10,15,20]
+Output: 15
+Explanation: You will start at index 1.
+- Pay 15 and climb two steps to reach the top.
+The total cost is 15.
+
+**Example 2:**
+Input: cost = [1,100,1,1,1,100,1,1,100,1]
+Output: 6
+Explanation: You will start at index 0.
+- Pay 1 and climb two steps to reach index 2.
+- Pay 1 and climb two steps to reach index 4.
+- Pay 1 and climb two steps to reach index 6.
+- Pay 1 and climb one step to reach index 7.
+- Pay 1 and climb two steps to reach index 9.
+- Pay 1 and climb one step to reach the top.
+The total cost is 6.
+
+Constraints:
+2 <= cost.length <= 1000
+0 <= cost[i] <= 999
+"""
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+
+
+
+
+
+
+
+#> Dynamic Programming: Knight Probability in Chessboard (Medium)
+"""
+https://leetcode.com/problems/knight-probability-in-chessboard/
+
+On an n x n chessboard, a knight starts at the cell (row, column) and attempts to make exactly k moves.
+The rows and columns are 0-indexed, so the top-left cell is (0, 0), and the bottom-right cell is (n - 1, n - 1).
+
+A chess knight has eight possible moves it can make, as illustrated below. 
+Each move is two cells in a cardinal direction, then one cell in an orthogonal direction.
+
+Each time the knight is to move, it chooses one of eight possible moves uniformly at random
+(even if the piece would go off the chessboard) and moves there.
+
+The knight continues moving until it has made exactly k moves or has moved off the chessboard.
+
+Return the probability that the knight remains on the board after it has stopped moving.
+
+**Example 1:**
+Input: n = 3, k = 2, row = 0, column = 0
+Output: 0.06250
+Explanation: There are two moves (to (1,2), (2,1)) that will keep the knight on the board.
+From each of those positions, there are also two moves that will keep the knight on the board.
+The total probability the knight stays on the board is 0.0625.
+
+**Example 2:**
+Input: n = 1, k = 0, row = 0, column = 0
+Output: 1.00000
+ 
+**Constraints**
+1 <= n <= 25
+0 <= k <= 100
+0 <= row, column <= n
+"""
+class Solution:
+  def knightProbability(self, n: int, k: int, row: int, column: int) -> float:

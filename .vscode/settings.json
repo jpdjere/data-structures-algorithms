@@ -92,6 +92,30 @@
     {
       "filePath": "Section 3 - Big O/Section 3 - Big O.md",
       "group": "Section"
+    },
+    {
+      "filePath": "Section 12 - Dynamic Programming/Section 12 - Dynamic Programming.md",
+      "group": "Section"
+    },
+    {
+      "filePath": "Exercises.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Exercises - Solved Practice.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Exercises - LeetCode - Others Solved Practice.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Exercises - 20.02.2022 Solution.py",
+      "group": "Section"
+    },
+    {
+      "filePath": "Exercises - 10.03.2022 Solution.py",
+      "group": "Section"
     }
   ],
   "favorites.sortOrder": "DESC"

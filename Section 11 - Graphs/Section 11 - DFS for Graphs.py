@@ -1,4 +1,4 @@
-def traversalBFS(graph, shape): # graph has the shape of our adj list
+def traversalDFS(graph, shape): # graph has the shape of our adj list
   if graph is None:
     return []
 

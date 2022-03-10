@@ -1004,7 +1004,6 @@ class Solution:
         return 1
       nodesBeforeLastLevel = 2 ** height - 1
 
-      n = 2 ** height - 1
       left = 0
       right = 2 ** height - 1
 
@@ -1297,8 +1296,6 @@ class Solution:
             if v > maxOcc:
                 maxOcc = v
         return [k for k, v in res.items() if v == maxOcc]
-            
-        
         
     def recursiveDFS(self, node, res):
         if not node:
