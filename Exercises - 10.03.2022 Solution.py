@@ -266,7 +266,203 @@ def trappingRainwater(heights):
 
 
 
+#> Arrays: Best Time to Buy and Sell Stock (Easy)
+'''
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
 
+You want to maximize your profit by choosing a single day to buy one stock and 
+choosing a different day in the future to sell that stock.
+Return the maximum profit you can achieve from this transaction. 
+
+If you cannot achieve any profit, return 0.
+
+Example 1:
+
+Input: prices = [7,1,5,3,6,4]
+Output: 5
+Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+
+Example 2:
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transactions are done and the max profit = 0.
+
+Constraints:
+
+1 <= prices.length <= 105
+0 <= prices[i] <= 104
+'''
+import math
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if len(prices) == 1:
+            return 0
+        # Keep track of two variables: minPrice and maxProfit
+        # Since we only care about lowest peak and hightest valley
+        minPrice = math.inf
+        maxProfit = 0
+        for price in prices:
+            # First check if we have a new max profit, comparing our
+            # old maxProfit againt the (currentPrice - minPrice -from previous iterations-)
+            maxProfit = max(maxProfit, price - minPrice)
+            # Only after calculating the maxProfit, update the minPrice, for future iterations
+            if price < minPrice:
+                minPrice = price
+        return maxProfit
+
+# Time Complexity O(N)  ---> One pass
+# Space Complexity O(1)  ----> Only two variables           
+
+
+
+#> Arrays: Best Time to Buy and Sell Stock II (Medium)
+'''   
+You are given an integer array prices where prices[i] is the price of a given stock on the ith day.
+
+On each day, you may decide to buy and/or sell the stock. You can only hold at most one share of the stock at any time. 
+However, you can buy it then immediately sell it on the same day.
+
+Find and return the maximum profit you can achieve.
+
+Example 1:
+Input: prices = [7,1,5,3,6,4]
+Output: 7
+Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-1 = 4.
+Then buy on day 4 (price = 3) and sell on day 5 (price = 6), profit = 6-3 = 3.
+Total profit is 4 + 3 = 7.
+
+Example 2:
+Input: prices = [1,2,3,4,5]
+Output: 4
+Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+Total profit is 4.
+
+Example 3:
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: There is no way to make a positive profit, so we never buy the stock to achieve the maximum profit of 0.
+ 
+
+Constraints:
+1 <= prices.length <= 3 * 104
+0 <= prices[i] <= 104
+'''
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if len(prices) == 1:
+            return 0
+        # Keep track of two variables: minPrice and maxProfit
+        # Since we only care about lowest peak and hightest valley
+        # (nevertheless, minPrice can be resetted to find local minimums)
+        minPrice = math.inf
+        maxProfit = 0
+        for price in prices:
+            # First check if we have a new max profit, comparing our
+            # old maxProfit against the sum of our current maxProfit + our new profit
+            # newLocalProfit = price - minPrice
+            if maxProfit + price - minPrice > maxProfit:
+              maxProfit = maxProfit + price - minPrice
+              # If we have udpated our maxProfit, we have found a new peak, so we should
+              # reset our minPrice, so that we can find a new local minimum price for future checks
+              minPrice = math.inf
+            # Only after calculating the maxProfit, update the minPrice, for future iterations
+            if price < minPrice:
+                minPrice = price
+        return maxProfit
+        
+
+
+
+#> Arrays: Best Time to Buy and Sell Stock III (Hard)
+'''
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+Find the maximum profit you can achieve. You may complete at most two transactions.
+
+Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+ 
+Example 1:
+Input: prices = [3,3,5,0,0,3,1,4]
+Output: 6
+Explanation: Buy on day 4 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+Then buy on day 7 (price = 1) and sell on day 8 (price = 4), profit = 4-1 = 3.
+Example 2:
+
+Input: prices = [1,2,3,4,5]
+Output: 4
+Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+Note that you cannot buy on day 1, buy on day 2 and sell them later, as you are engaging multiple transactions at the same time. You must sell before buying again.
+Example 3:
+
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transaction is done, i.e. max profit = 0.
+ 
+Constraints:
+1 <= prices.length <= 105
+0 <= prices[i] <= 105
+'''
+class Solution:
+  def maxProfit(self, prices: List[int]) -> int:
+
+
+
+
+#> Arrays: 3Sum (Medium)
+'''
+Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+Notice that the solution set must not contain duplicate triplets.
+
+Example 1:
+
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+
+Example 2:
+Input: nums = []
+Output: []
+Example 3:
+
+Input: nums = [0]
+Output: []
+ 
+
+Constraints:
+
+0 <= nums.length <= 3000
+-105 <= nums[i] <= 105
+'''
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        if len(nums) < 3:
+    #         return []
+    #     target = 0
+    #     triplets = []
+    #     for idx, num in enumerate(nums):
+    #         remaining = target - num
+    #         possibleComplementArray = self.twoSum(nums[0:idx] + nums[idx + 1], remaining)
+    #         possibleComplement = sum(possibleComplementArray)
+    #         if remaining + possibleComplement == 0:
+    #             triplets.append([num]+possibleComplementArray)
+    #     return triplets
+
+    # # [-1, 3, 4] target = 3
+    # def twosum(self, nums, target):
+    #     seen = {}
+    #     for num in nums:
+    #         complement = target - num
+    #         if complement in seen:
+    #             return [num, complement]
+    #         else:
+    #             seen[complement] = True # seen[3 - -1] = seen[4] = True
+    #     return []
+            
+
+
+
+            
 
 
 
@@ -914,30 +1110,25 @@ It is guaranteed that all the employees can be informed.
 class Solution:
     def numOfMinutes(self, n: int, headID: int, manager: List[int], informTime: List[int]) -> int:
         if n == 1:
-            return 0
-        adjList = self.getAdjList(n, manager)
-        return self.recursiveDFS(0, headID, informTime, adjList)
+            return 0 
+        adjList = self.createAdjList(n, manager, headID)
+        return self.recursiveTimeLength(adjList, headID, informTime)
 
-    def recursiveDFS(self, totalTime, managerID, informTime, adjList):
-        if len(adjList[managerID]) == 0:
+
+    def recursiveTimeLength(self, adjList, currentEmployee, informTime):
+        if len(adjList[currentEmployee]) == 0:
             return 0
-        managees = adjList[managerID]
-        totalTime += informTime[managerID] + max([self.recursiveDFS(totalTime, employee, informTime, adjList) for employee in managees])
-        return totalTime
+        managees = adjList[currentEmployee]
+        return informTime[currentEmployee] + max([self.recursiveTimeLength(adjList, emp, informTime) for emp in managees])
+
     
-    def getAdjList(self, n, manager):
+    def createAdjList(self, n, manager, headID):
         adjList = [[] for i in range(n)]
-        for employee, man in enumerate(manager):
-            if man == -1:
+        for employee, manager in enumerate(manager):
+            if employee == headID:
                 continue
-            adjList[man].append(employee)
+            adjList[manager].append(employee)
         return adjList
-
-
-
-
-
-
 
 
 
@@ -1077,8 +1268,33 @@ Constraints:
 """
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
+        dp = [False for _ in cost]
+        # cost[n] doesn't have an associated step, so we start without adding it, just the min between two subproblems
+        return min(self.recursive(cost, len(cost) - 1, dp), self.recursive(cost, len(cost) - 2, dp))
 
+    def recursive(self, cost, i, dp):
+        if i < 0:
+            return 0
+        if i < 2:
+            return cost[i]
+        if dp[i]:
+            return dp[i]
 
+        dp[i] = cost[i] + min(self.recursive(cost, i - 1, dp), self.recursive(cost, i - 2, dp))
+        return dp[i]
+
+Time complexity: O(N)
+Space complexity: O(N)
+
+# cost[i] = 0     1       2       3       4       Fin 
+#                                 n-2     n-1       n
+
+# minCost[i] = cost[i] + min(minCost[i-1], minCost[i-2])           
+
+#                                         minCost[n]
+
+#                     minCost[n-1]                            minCost[n-2]
+#             minCost[n-2] minCost[n-3]               minCost[n-3]       minCost[n-4]
 
 
 
@@ -1117,5 +1333,313 @@ Output: 1.00000
 0 <= k <= 100
 0 <= row, column <= n
 """
+directions = [[1,2], [2,1], [-2, -1], [-1, -2], [1, -2], [-2, 1], [2, -1], [-1, 2]]
 class Solution:
-  def knightProbability(self, n: int, k: int, row: int, column: int) -> float:
+    def knightProbability(self, n: int, k: int, row: int, column: int) -> float:
+        dp = [[[False for c in range(n)] for r in range(n)] for _ in range(k+1)]
+        return self.recursiveProbability(n, k, row, column, dp)
+
+    def recursiveProbability(self, n, k, row, column, dp):
+        if row >= n or row < 0 or column >= n or column < 0:
+            return 0
+        if k == 0:
+            return 1
+        if dp[k][row][column]:
+            return dp[k][row][column]
+        
+        prob = 0
+        for x, y in directions:
+            prob += self.recursiveProbability(n, k - 1, row + x, column + y, dp) / 8
+        dp[k][row][column] = prob
+        return prob
+
+
+
+#> Dynamic Programming: Climbing Stairs (Easy)
+"""
+https://leetcode.com/problems/climbing-stairs/
+
+You are climbing a staircase. It takes n steps to reach the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+ 
+
+**Example 1:**
+Input: n = 2
+Output: 2
+Explanation: There are two ways to climb to the top.
+1. 1 step + 1 step
+2. 2 steps
+
+**Example 2:**
+Input: n = 3
+Output: 3
+Explanation: There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step
+ 
+Constraints:
+1 <= n <= 45
+"""
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        dp = [False for i in range(n + 1)]
+        return self.recursiveClimb(n, dp)
+        
+    def recursiveClimb(self, n, dp):
+        if n == 0:
+            return 1
+        if n == 1:
+            return 1
+        if n < 0:
+            return 0
+        if dp[n]:
+            return dp[n]
+        
+        dp[n] = self.recursiveClimb(n - 1, dp) + self.recursiveClimb(n - 2, dp)
+        
+        return dp[n]
+        
+
+#> Dynamic Programming: Fibonacci Number (Easy)
+"""
+https://leetcode.com/problems/fibonacci-number/
+
+The Fibonacci numbers, commonly denoted F(n) form a sequence, called the Fibonacci sequence,
+such that each number is the sum of the two preceding ones, starting from 0 and 1. That is,
+
+F(0) = 0, F(1) = 1
+F(n) = F(n - 1) + F(n - 2), for n > 1.
+Given n, calculate F(n).
+
+Example 1:
+
+Input: n = 2
+Output: 1
+Explanation: F(2) = F(1) + F(0) = 1 + 0 = 1.
+Example 2:
+
+Input: n = 3
+Output: 2
+Explanation: F(3) = F(2) + F(1) = 1 + 1 = 2.
+Example 3:
+
+Input: n = 4
+Output: 3
+Explanation: F(4) = F(3) + F(2) = 2 + 1 = 3.
+ 
+
+Constraints:
+0 <= n <= 30
+"""
+class Solution:
+    def fib(self, n: int) -> int:
+        dp = [False for i in range(n + 1)]
+        return self.recursiveFib(n, dp)
+    
+    def recursiveFib(self, i, dp):
+        if i < 2:
+            return i
+        dp[i] = self.recursiveFib(i - 1, dp) + self.recursiveFib(i - 2, dp)
+        return dp[i]
+
+
+
+#> Dynamic Programming: N-th Tribonacci Number (Easy)
+
+"""
+The Tribonacci sequence Tn is defined as follows: 
+
+T0 = 0, T1 = 1, T2 = 1, and Tn+3 = Tn + Tn+1 + Tn+2 for n >= 0.
+
+Given n, return the value of Tn.
+
+Example 1:
+
+Input: n = 4
+Output: 4
+Explanation:
+T_3 = 0 + 1 + 1 = 2
+T_4 = 1 + 1 + 2 = 4
+Example 2:
+
+Input: n = 25
+Output: 1389537
+ 
+
+Constraints:
+0 <= n <= 37
+The answer is guaranteed to fit within a 32-bit integer, ie. answer <= 2^31 - 1.
+"""
+class Solution:
+    def tribonacci(self, n: int) -> int:
+        dp = [False for i in range(n + 1)]
+        return self.recursiveTri(n, dp)
+        
+    def recursiveTri(self, i, dp):
+        if i < 0:
+            return 0
+        if i == 0:
+            return 0
+        if i < 3:
+            return 1
+        if dp[i]:
+            return dp[i]
+        dp[i] = self.recursiveTri(i - 1, dp) + self.recursiveTri(i - 2, dp) + self.recursiveTri(i - 3, dp)
+        
+        return dp[i]
+        
+
+#> Dynamic Programming: Coin Change (Medium)
+"""
+https://leetcode.com/problems/coin-change/
+
+You are given an integer array coins representing coins of different denominations 
+and an integer amount representing a total amount of money.
+
+Return the fewest number of coins that you need to make up that amount. 
+If that amount of money cannot be made up by any combination of the coins, return -1.
+
+You may assume that you have an infinite number of each kind of coin.
+
+**Example 1:**
+
+Input: coins = [1,2,5], amount = 11
+Output: 3
+Explanation: 11 = 5 + 5 + 1
+
+**Example 2:**
+Input: coins = [2], amount = 3
+Output: -1
+
+**Example 3:**
+Input: coins = [1], amount = 0
+Output: 0
+
+**Constraints:**
+1 <= coins.length <= 12
+1 <= coins[i] <= 231 - 1
+0 <= amount <= 104
+"""
+import math
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        # Create array with max values for indexes 0 to our amount
+        dp = [math.Inf for i in range(amount + 1)]
+        # Our base case is 0: if amount remaining is 0, we need 0 coins
+        dp[0] = 0
+
+        # Now we compute every value in dp, starting from 1
+        # until our amount
+        for am in range(1, amount + 1):
+            # Now we loop for every coins we have in our array
+            for coin in coins:
+                # We substract our current amount minus our current coin
+                # If that calculation is positive (we didn't go over zero)
+                # that means we can continue searching
+                if am - coin >= 0:
+                    # If the above check is true, we possibly found a solution
+                    # or an intermediate step for our solution
+                    # So we say that our current dp[amount] is the minimum between
+                    # itself and (1 + dp[amount - coin])
+                    # The 1 comes from the current coin that we are using
+                    # The [amount - coin] comes from the fact that, for example, if the
+                    # amount we had is 7, and the coin is 4, then we are saying
+                    # dp[7] = 1 + dp[7 - 4] ---> One coin used (the one for the loop), plus
+                    # the sub problem for the remaining amount
+                    dp[am] = min(dp[am], 1 + dp[am - coin])
+
+        # Return the last value calculated (the one we need) if it's different than
+        # inifinity, otherwise return -1, because we didn't find a solution for our amount
+        return dp[-1] if dp[-1] != math.inf else -1
+
+import math
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        dp = [math.Inf for i in range(amount + 1)]
+        dp[0] = 0
+
+        for am in range(1, amount + 1):
+            for coin in coins:
+                if am - coin >= 0:
+                    dp[am] = min(dp[am], 1 + dp[am - coin])
+
+        return dp[-1] if dp[-1] != math.inf else -1
+
+
+#> Dynamic Programming: Minimum Cost For Tickets (Medium)
+"""
+https://leetcode.com/problems/minimum-cost-for-tickets/
+
+You have planned some train traveling one year in advance. 
+The days of the year in which you will travel are given as an integer array `days`. 
+Each day is an integer from `1` to `365`.
+
+Train tickets are sold in three different ways:
+
+- a 1-day pass is sold for costs[0] dollars,
+- a 7-day pass is sold for costs[1] dollars, and
+- a 30-day pass is sold for costs[2] dollars.
+The passes allow that many days of consecutive travel.
+
+For example, if we get a 7-day pass on day 2, then we can travel for 7 days: 2, 3, 4, 5, 6, 7, and 8.
+
+Return the **minimum number of dollars you need to travel every day in the given list of days.**
+
+**Example 1:**
+Input: days = [1,4,6,7,8,20], costs = [2,7,15]
+Output: 11
+Explanation: For example, here is one way to buy passes that lets you travel your travel plan:
+On day 1, you bought a 1-day pass for costs[0] = $2, which covered day 1.
+On day 3, you bought a 7-day pass for costs[1] = $7, which covered days 3, 4, ..., 9.
+On day 20, you bought a 1-day pass for costs[0] = $2, which covered day 20.
+In total, you spent $11 and covered all the days of your travel.
+
+**Example 2:**
+Input: days = [1,2,3,4,5,6,7,8,9,10,30,31], costs = [2,7,15]
+Output: 17
+Explanation: For example, here is one way to buy passes that lets you travel your travel plan:
+On day 1, you bought a 30-day pass for costs[2] = $15 which covered days 1, 2, ..., 30.
+On day 31, you bought a 1-day pass for costs[0] = $2 which covered day 31.
+In total, you spent $17 and covered all the days of your travel.
+ 
+
+**Constraints:**
+
+1 <= days.length <= 365
+1 <= days[i] <= 365
+days is in strictly increasing order.
+costs.length == 3
+1 <= costs[i] <= 1000
+"""
+import math
+class Solution:
+    def mincostTickets(self, days: List[int], costs: List[int]) -> int:
+        # I think this is an object and not an array, because we won't be calculating
+        # the minimum cost for all days in the days array
+        dp = {}
+        currentDay = 0
+        return self.recursiveCost(currentDay, days, costs, dp)
+
+    def recursiveCost(self, currentDay, days, costs, dp):
+        # Base case when we have reached the last day, the cost is 0. Notice that we will 
+        # reach this base case, because endDay (with which the recursive function is called)
+        # grows by 1 until the next travel day OR until we reach len(days). That's when will hit this base case.
+        if currentDay == len(days):
+            return 0
+        if currentDay in dp:
+            return dp[currentDay]
+
+        dp[currentDay] = math.inf
+        for travelDays, cost in list(zip([1, 7, 30], costs)):
+            # First, get the index of the next day that we will need a travel pass
+            endDay = currentDay
+            while endDay < len(days) and days[endDay] < days[currentDay] + travelDays:
+                endDay += 1
+            # The cost of travelling in the current day is the minimum between what we already have calculated
+            # and the cost for the current ticket (looping through 1, 7 and 30 day tickets), plus the minimum
+            # cost of of travelling from my end day (so we call recursiveCost with endDay)
+            dp[currentDay] = min(dp[currentDay], cost + self.recursiveCost(endDay, days, costs, dp))
+
+        return dp[currentDay]

@@ -97,6 +97,7 @@ print(twoSum([2, 7, 11, 15], 9))
 #> Excercise: Longest Palindromic Substring
 
 '''
+https://leetcode.com/problems/longest-palindromic-substring/discuss/751188/Simple-Easy-to-Follow-Python
 Given a string `s`, find the longest palindromic substring in `s`.
 
 You **may** assume that the maximum length of `s` is 1000.
@@ -124,7 +125,7 @@ s consists only of lowercase English letters.
 
 def findLongestPalindromicSubstring(s):
 
-https://leetcode.com/problems/longest-palindromic-substring/discuss/751188/Simple-Easy-to-Follow-Python
+
 
 
 #> Arrays: Maximum Subarray
@@ -398,7 +399,145 @@ print(trappingRainwater(nums))
 
 
 
+#> Arrays: Best Time to Buy and Sell Stock (Easy)
+'''
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
 
+You want to maximize your profit by choosing a single day to buy one stock and 
+choosing a different day in the future to sell that stock.
+Return the maximum profit you can achieve from this transaction. 
+
+If you cannot achieve any profit, return 0.
+
+Example 1:
+
+Input: prices = [7,1,5,3,6,4]
+Output: 5
+Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+
+Example 2:
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transactions are done and the max profit = 0.
+
+Constraints:
+
+1 <= prices.length <= 105
+0 <= prices[i] <= 104
+'''
+import math
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if len(prices) == 1:
+            return 0
+        # Keep track of two variables: minPrice and maxProfit
+        # Since we only care about lowest peak and hightest valley
+        minPrice = math.inf
+        maxProfit = 0
+        for price in prices:
+            # First check if we have a new max profit, comparing our
+            # old maxProfit againt the (currentPrice - minPrice -from previous iterations-)
+            maxProfit = max(maxProfit, price - minPrice)
+            # Only after calculating the maxProfit, update the minPrice, for future iterations
+            if price < minPrice:
+                minPrice = price
+        return maxProfit
+
+# Time Complexity O(N)  ---> One pass
+# Space Complexity O(1)  ----> Only two variables           
+
+
+
+#> Arrays: Best Time to Buy and Sell Stock II (Medium)
+'''   
+You are given an integer array prices where prices[i] is the price of a given stock on the ith day.
+
+On each day, you may decide to buy and/or sell the stock. You can only hold at most one share of the stock at any time. 
+However, you can buy it then immediately sell it on the same day.
+
+Find and return the maximum profit you can achieve.
+
+Example 1:
+Input: prices = [7,1,5,3,6,4]
+Output: 7
+Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-1 = 4.
+Then buy on day 4 (price = 3) and sell on day 5 (price = 6), profit = 6-3 = 3.
+Total profit is 4 + 3 = 7.
+
+Example 2:
+Input: prices = [1,2,3,4,5]
+Output: 4
+Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+Total profit is 4.
+
+Example 3:
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: There is no way to make a positive profit, so we never buy the stock to achieve the maximum profit of 0.
+ 
+
+Constraints:
+1 <= prices.length <= 3 * 104
+0 <= prices[i] <= 104
+'''
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if len(prices) == 1:
+            return 0
+        # Keep track of two variables: minPrice and maxProfit
+        # Since we only care about lowest peak and hightest valley
+        # (nevertheless, minPrice can be resetted to find local minimums)
+        minPrice = math.inf
+        maxProfit = 0
+        for price in prices:
+            # First check if we have a new max profit, comparing our
+            # old maxProfit against the sum of our current maxProfit + our new profit
+            # newLocalProfit = price - minPrice
+            if maxProfit + price - minPrice > maxProfit:
+              maxProfit = maxProfit + price - minPrice
+              # If we have udpated our maxProfit, we have found a new peak, so we should
+              # reset our minPrice, so that we can find a new local minimum price for future checks
+              minPrice = math.inf
+            # Only after calculating the maxProfit, update the minPrice, for future iterations
+            if price < minPrice:
+                minPrice = price
+        return maxProfit
+        
+
+
+
+#> Arrays: Best Time to Buy and Sell Stock III (Hard)
+'''
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+Find the maximum profit you can achieve. You may complete at most two transactions.
+
+Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+ 
+Example 1:
+Input: prices = [3,3,5,0,0,3,1,4]
+Output: 6
+Explanation: Buy on day 4 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+Then buy on day 7 (price = 1) and sell on day 8 (price = 4), profit = 4-1 = 3.
+Example 2:
+
+Input: prices = [1,2,3,4,5]
+Output: 4
+Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+Note that you cannot buy on day 1, buy on day 2 and sell them later, as you are engaging multiple transactions at the same time. You must sell before buying again.
+Example 3:
+
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transaction is done, i.e. max profit = 0.
+ 
+Constraints:
+1 <= prices.length <= 105
+0 <= prices[i] <= 105
+'''
+class Solution:
+  def maxProfit(self, prices: List[int]) -> int:
 
 
 
@@ -835,6 +974,9 @@ def minRemoveToMakeValid(self, s: str) -> str:
 "a()b"
 
 "))(("
+
+
+
 
 #> Trees: Maximum Depth of Binary Tree (Easy)
 """

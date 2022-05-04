@@ -734,3 +734,206 @@ We are iterating over `k` different steps. At every step, how many recursive ste
 So **time complexity is O(N^2 * k)**
 
 As for **space complexity** it will also be **O(N^2 * k)**, because that's the size of our **dp**. It is of size `k`, and then inside of each `k` level there is a grid of **N^2**. 
+
+
+
+#> Dynamic Programming: Climbing Stairs (Easy)
+"""
+https://leetcode.com/problems/climbing-stairs/
+
+You are climbing a staircase. It takes n steps to reach the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+ 
+
+**Example 1:**
+Input: n = 2
+Output: 2
+Explanation: There are two ways to climb to the top.
+1. 1 step + 1 step
+2. 2 steps
+
+**Example 2:**
+Input: n = 3
+Output: 3
+Explanation: There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step
+ 
+Constraints:
+1 <= n <= 45
+"""
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        dp = [False for i in range(n + 1)]
+        return self.recursiveClimb(n, dp)
+        
+    def recursiveClimb(self, n, dp):
+        if n == 0:
+            return 1
+        if n == 1:
+            return 1
+        if n < 0:
+            return 0
+        if dp[n]:
+            return dp[n]
+        
+        dp[n] = self.recursiveClimb(n - 1, dp) + self.recursiveClimb(n - 2, dp)
+        
+        return dp[n]
+        
+
+#> Dynamic Programming: Fibonacci Number (Easy)
+"""
+https://leetcode.com/problems/fibonacci-number/
+
+The Fibonacci numbers, commonly denoted F(n) form a sequence, called the Fibonacci sequence,
+such that each number is the sum of the two preceding ones, starting from 0 and 1. That is,
+
+F(0) = 0, F(1) = 1
+F(n) = F(n - 1) + F(n - 2), for n > 1.
+Given n, calculate F(n).
+
+Example 1:
+
+Input: n = 2
+Output: 1
+Explanation: F(2) = F(1) + F(0) = 1 + 0 = 1.
+Example 2:
+
+Input: n = 3
+Output: 2
+Explanation: F(3) = F(2) + F(1) = 1 + 1 = 2.
+Example 3:
+
+Input: n = 4
+Output: 3
+Explanation: F(4) = F(3) + F(2) = 2 + 1 = 3.
+ 
+
+Constraints:
+0 <= n <= 30
+"""
+class Solution:
+    def fib(self, n: int) -> int:
+        dp = [False for i in range(n + 1)]
+        return self.recursiveFib(n, dp)
+    
+    def recursiveFib(self, i, dp):
+        if i < 2:
+            return i
+        dp[i] = self.recursiveFib(i - 1, dp) + self.recursiveFib(i - 2, dp)
+        return dp[i]
+
+
+
+#> Dynamic Programming: N-th Tribonacci Number (Easy)
+
+"""
+The Tribonacci sequence Tn is defined as follows: 
+
+T0 = 0, T1 = 1, T2 = 1, and Tn+3 = Tn + Tn+1 + Tn+2 for n >= 0.
+
+Given n, return the value of Tn.
+
+Example 1:
+
+Input: n = 4
+Output: 4
+Explanation:
+T_3 = 0 + 1 + 1 = 2
+T_4 = 1 + 1 + 2 = 4
+Example 2:
+
+Input: n = 25
+Output: 1389537
+ 
+
+Constraints:
+0 <= n <= 37
+The answer is guaranteed to fit within a 32-bit integer, ie. answer <= 2^31 - 1.
+"""
+class Solution:
+    def tribonacci(self, n: int) -> int:
+        dp = [False for i in range(n + 1)]
+        return self.recursiveTri(n, dp)
+        
+    def recursiveTri(self, i, dp):
+        if i < 0:
+            return 0
+        if i == 0:
+            return 0
+        if i < 3:
+            return 1
+        if dp[i]:
+            return dp[i]
+        dp[i] = self.recursiveTri(i - 1, dp) + self.recursiveTri(i - 2, dp) + self.recursiveTri(i - 3, dp)
+        
+        return dp[i]
+        
+
+#> Dynamic Programming: Coin Change (Medium)
+"""
+https://leetcode.com/problems/coin-change/
+
+You are given an integer array coins representing coins of different denominations 
+and an integer amount representing a total amount of money.
+
+Return the fewest number of coins that you need to make up that amount. 
+If that amount of money cannot be made up by any combination of the coins, return -1.
+
+You may assume that you have an infinite number of each kind of coin.
+
+**Example 1:**
+
+Input: coins = [1,2,5], amount = 11
+Output: 3
+Explanation: 11 = 5 + 5 + 1
+
+**Example 2:**
+Input: coins = [2], amount = 3
+Output: -1
+
+**Example 3:**
+Input: coins = [1], amount = 0
+Output: 0
+
+**Constraints:**
+1 <= coins.length <= 12
+1 <= coins[i] <= 231 - 1
+0 <= amount <= 104
+"""
+```py
+import math
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        # Create array with max values for indexes 0 to our amount
+        dp = [math.inf for i in range(amount + 1)]
+        # Our base case is 0: if amount remaining is 0, we need 0 coins
+        dp[0] = 0
+
+        # Now we compute every value in dp, starting from 1
+        # until our amount
+        for am in range(1, amount + 1):
+            # Now we loop for every coins we have in our array
+            for coin in coins:
+                # We substract our current amount minus our current coin
+                # If that calculation is positive (we didn't go over zero)
+                # that means we can continue searching
+                if am - coin >= 0:
+                    # If the above check is true, we possibly found a solution
+                    # or an intermediate step for our solution
+                    # So we say that our current dp[amount] is the minimum between
+                    # itself and (1 + dp[amount - coin])
+                    # The 1 comes from the current coin that we are using
+                    # The [amount - coin] comes from the fact that, for example, if the
+                    # amount we had is 7, and the coin is 4, then we are saying
+                    # dp[7] = 1 + dp[7 - 4] ---> One coin used (the one for the loop), plus
+                    # the sub problem for the remaining amount
+                    dp[am] = min(dp[am], 1 + dp[am - coin])
+
+        # Return the last value calculated (the one we need) if it's different than
+        # inifinity, otherwise return -1, because we didn't find a solution for our amount
+        return dp[-1] if dp[-1] != math.inf else -1
+```

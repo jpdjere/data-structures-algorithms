@@ -329,6 +329,7 @@ Constraints:
 ### Move Zeroes - Solution
 
 ```python
+# https://leetcode.com/problems/move-zeroes/
 # Time Complexity: O(N)
 class Solution:
   def moveZeroes(self, nums: List[int]) -> None:
@@ -389,8 +390,8 @@ Constraints:
 ```
 
 ### Rotate Array (Medium) - Solution
-
 ```python
+# https://leetcode.com/problems/rotate-array/
 # Time Complexity: O(N)
 # Space Complexity: O(N)
 class Solution:
@@ -800,6 +801,9 @@ def trappingRainwater(heights):
       # If we have a wall to our left (i.e. our maxLeft 
       # is greater than our current value) calculate water
       if maxLeft > heights[a]:
+        # WE DON'T NEED TO CALCULATE min(maxLeft, maxRight), because we already know that heights[b] is higher than heights[a]
+        # so it forms a wall to the right. Our smaller wall is therefor maxLeft. Also, notice that we still haven't updated maxRight
+        # so it can still be 0, for example, while our max wall to our right isn't actually 0 (on our first iteration)
         accumulatedWater += (maxLeft - heights[a])
       else:
         # Otherwise, update our current maxLeft

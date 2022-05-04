@@ -52,7 +52,7 @@ def twoSum(arr, target):
 
 
   
-#> Excercise: Longest Palindromic Substring
+#> Strings: Longest Palindromic Substring
 
 '''
 Given a string `s`, find the longest palindromic substring in `s`.
@@ -125,7 +125,78 @@ def maxSubArray(nums):
 
 
 
-#> Arrays: Move Zeroes
+#> Arrays: Binary Search (Easy)
+'''
+https://leetcode.com/problems/binary-search/
+
+Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. 
+If target exists, then return its index. Otherwise, return -1.
+
+You must write an algorithm with O(log n) runtime complexity.
+
+
+Example 1:
+Input: nums = [-1,0,3,5,9,12], target = 9
+Output: 4
+Explanation: 9 exists in nums and its index is 4
+
+Example 2:
+Input: nums = [-1,0,3,5,9,12], target = 2
+Output: -1
+Explanation: 2 does not exist in nums so return -1
+ 
+Constraints:
+1 <= nums.length <= 104
+-104 < nums[i], target < 104
+All the integers in nums are unique.
+nums is sorted in ascending order.
+'''
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+
+
+
+#> Arrays: Search in Rotated Sorted Array (Medium)
+"""
+https://leetcode.com/problems/search-in-rotated-sorted-array/
+
+There is an integer array nums sorted in ascending order (with distinct values).
+
+Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
+
+Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
+
+You must write an algorithm with O(log n) runtime complexity.
+
+ 
+Example 1:
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+
+Example 2:
+Input: nums = [4,5,6,7,0,1,2], target = 3
+Output: -1
+
+Example 3:
+Input: nums = [1], target = 0
+Output: -1
+ 
+
+Constraints:
+1 <= nums.length <= 5000
+-104 <= nums[i] <= 104
+All values of nums are unique.
+nums is an ascending array that is possibly rotated.
+-104 <= target <= 104
+"""
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+
+
+
+
+
+#> Arrays: Move Zeroes (Easy)
 '''
 https://leetcode.com/problems/move-zeroes/
 
@@ -196,7 +267,9 @@ Constraints:
 def rotate(nums: List[int], k: int) -> None:
 
 
-#> Arrays: Container with Most Water
+
+
+#> Arrays: Container with Most Water (Medium)
 '''
 https://leetcode.com/problems/container-with-most-water/
 
@@ -236,7 +309,7 @@ def containerWithGreatestArea(arr):
 
 
 
-#> Arrays: Trapping Rainwater
+#> Arrays: Trapping Rainwater (Hard)
 '''
 https://leetcode.com/problems/trapping-rain-water/
 
@@ -267,7 +340,116 @@ def trappingRainwater(heights):
 
 
 
+#> Arrays: Best Time to Buy and Sell Stock (Easy)
+'''
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+
+Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+
+ 
+
+Example 1:
+
+Input: prices = [7,1,5,3,6,4]
+Output: 5
+Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+Example 2:
+
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transactions are done and the max profit = 0.
+ 
+
+Constraints:
+
+1 <= prices.length <= 105
+0 <= prices[i] <= 104
+'''
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+
+
+
+
+#> Arrays: Best Time to Buy and Sell Stock II (Medium)
+'''
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+
+You are given an integer array prices where prices[i] is the price of a given stock on the ith day.
+
+On each day, you may decide to buy and/or sell the stock. 
+You can only hold at most one share of the stock at any time. 
+However, you can buy it then immediately sell it on the same day.
+
+Find and return the maximum profit you can achieve.
+
+Example 1:
+Input: prices = [7,1,5,3,6,4]
+Output: 7
+Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-1 = 4.
+Then buy on day 4 (price = 3) and sell on day 5 (price = 6), profit = 6-3 = 3.
+Total profit is 4 + 3 = 7.
+
+Example 2:
+Input: prices = [1,2,3,4,5]
+Output: 4
+Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+Total profit is 4.
+
+Example 3:
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: There is no way to make a positive profit, so we never buy the stock to achieve the maximum profit of 0.
+ 
+
+Constraints:
+1 <= prices.length <= 3 * 104
+0 <= prices[i] <= 104
+'''
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        
+
+
+
+
+
+#> Arrays: Best Time to Buy and Sell Stock III (Hard)
+'''
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+Find the maximum profit you can achieve. You may complete at most two transactions.
+
+Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+ 
+Example 1:
+Input: prices = [3,3,5,0,0,3,1,4]
+Output: 6
+Explanation: Buy on day 4 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+Then buy on day 7 (price = 1) and sell on day 8 (price = 4), profit = 4-1 = 3.
+Example 2:
+
+Input: prices = [1,2,3,4,5]
+Output: 4
+Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+Note that you cannot buy on day 1, buy on day 2 and sell them later, as you are engaging multiple transactions at the same time. You must sell before buying again.
+Example 3:
+
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transaction is done, i.e. max profit = 0.
+ 
+Constraints:
+1 <= prices.length <= 105
+0 <= prices[i] <= 105
+'''
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
 
 
 
@@ -300,11 +482,30 @@ class LinkedList:
   def remove(self):
 
 #> Linked Lists: Reverse a Singly Linked List (Easy)
+"""
+https://leetcode.com/problems/reverse-linked-list/
+Given the head of a singly linked list, reverse the list, and return the reversed list.
 
-class Node:
+Example 1:
 
-class LinkedList:
-  def reverse(self):
+Input: head = [1,2,3,4,5]
+Output: [5,4,3,2,1]
+
+Example 2:
+Input: head = [1,2]
+Output: [2,1]
+Example 3:
+
+Input: head = []
+Output: []
+
+"""
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+
+
+
+
 
 #> Linked Lists: M, N reversals (Reverse Linked List II) (Medium)
 """
@@ -925,8 +1126,48 @@ class Solution:
 
 
 
+#> Graphs: Number of Islands (Medium)
+"""
+https://leetcode.com/problems/number-of-islands/
 
+Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), 
+return the number of islands.
 
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.
+You may assume all four edges of the grid are all surrounded by water.
+ 
+Example 1:
+
+Input: grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+Output: 1
+
+Example 2:
+
+Input: grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+Output: 3
+ 
+
+Constraints:
+
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 300
+grid[i][j] is '0' or '1'.
+"""
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+                    
+        
 
 
 
@@ -1008,3 +1249,186 @@ Output: 1.00000
 """
 class Solution:
   def knightProbability(self, n: int, k: int, row: int, column: int) -> float:
+
+
+
+#> Dynamic Programming: Climbing Stairs (Easy)
+"""
+You are climbing a staircase. It takes n steps to reach the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+ 
+
+**Example 1:**
+Input: n = 2
+Output: 2
+Explanation: There are two ways to climb to the top.
+1. 1 step + 1 step
+2. 2 steps
+
+**Example 2:**
+Input: n = 3
+Output: 3
+Explanation: There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step
+ 
+Constraints:
+1 <= n <= 45
+"""
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        
+
+#> Dynamic Programming: Fibonacci Number (Easy)
+"""
+https://leetcode.com/problems/fibonacci-number/
+
+The Fibonacci numbers, commonly denoted F(n) form a sequence, called the Fibonacci sequence,
+such that each number is the sum of the two preceding ones, starting from 0 and 1. That is,
+
+F(0) = 0, F(1) = 1
+F(n) = F(n - 1) + F(n - 2), for n > 1.
+Given n, calculate F(n).
+
+Example 1:
+
+Input: n = 2
+Output: 1
+Explanation: F(2) = F(1) + F(0) = 1 + 0 = 1.
+Example 2:
+
+Input: n = 3
+Output: 2
+Explanation: F(3) = F(2) + F(1) = 1 + 1 = 2.
+Example 3:
+
+Input: n = 4
+Output: 3
+Explanation: F(4) = F(3) + F(2) = 2 + 1 = 3.
+ 
+
+Constraints:
+0 <= n <= 30
+"""
+class Solution:
+    def fib(self, n: int) -> int:
+
+
+
+
+#> Dynamic Programming: N-th Tribonacci Number (Easy)
+
+"""
+The Tribonacci sequence Tn is defined as follows: 
+
+T0 = 0, T1 = 1, T2 = 1, and Tn+3 = Tn + Tn+1 + Tn+2 for n >= 0.
+
+Given n, return the value of Tn.
+
+Example 1:
+
+Input: n = 4
+Output: 4
+Explanation:
+T_3 = 0 + 1 + 1 = 2
+T_4 = 1 + 1 + 2 = 4
+Example 2:
+
+Input: n = 25
+Output: 1389537
+ 
+
+Constraints:
+0 <= n <= 37
+The answer is guaranteed to fit within a 32-bit integer, ie. answer <= 2^31 - 1.
+"""
+class Solution:
+    def tribonacci(self, n: int) -> int:
+
+        
+
+
+#> Dynamic Programming: Coin Change (Medium)
+"""
+https://leetcode.com/problems/coin-change/
+
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+
+Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+
+You may assume that you have an infinite number of each kind of coin.
+
+**Example 1:**
+
+Input: coins = [1,2,5], amount = 11
+Output: 3
+Explanation: 11 = 5 + 5 + 1
+
+**Example 2:**
+Input: coins = [2], amount = 3
+Output: -1
+
+**Example 3:**
+Input: coins = [1], amount = 0
+Output: 0
+
+**Constraints:**
+1 <= coins.length <= 12
+1 <= coins[i] <= 231 - 1
+0 <= amount <= 104
+"""
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        
+
+
+#> Dynamic Programming: Minimum Cost For Tickets (Medium)
+"""
+https://leetcode.com/problems/minimum-cost-for-tickets/
+
+You have planned some train traveling one year in advance. 
+The days of the year in which you will travel are given as an integer array `days`. 
+Each day is an integer from `1` to `365`.
+
+Train tickets are sold in three different ways:
+
+- a 1-day pass is sold for costs[0] dollars,
+- a 7-day pass is sold for costs[1] dollars, and
+- a 30-day pass is sold for costs[2] dollars.
+The passes allow that many days of consecutive travel.
+
+For example, if we get a 7-day pass on day 2, then we can travel for 7 days: 2, 3, 4, 5, 6, 7, and 8.
+
+Return the **minimum number of dollars you need to travel every day in the given list of days.**
+
+**Example 1:**
+Input: days = [1,4,6,7,8,20], costs = [2,7,15]
+Output: 11
+Explanation: For example, here is one way to buy passes that lets you travel your travel plan:
+On day 1, you bought a 1-day pass for costs[0] = $2, which covered day 1.
+On day 3, you bought a 7-day pass for costs[1] = $7, which covered days 3, 4, ..., 9.
+On day 20, you bought a 1-day pass for costs[0] = $2, which covered day 20.
+In total, you spent $11 and covered all the days of your travel.
+
+**Example 2:**
+Input: days = [1,2,3,4,5,6,7,8,9,10,30,31], costs = [2,7,15]
+Output: 17
+Explanation: For example, here is one way to buy passes that lets you travel your travel plan:
+On day 1, you bought a 30-day pass for costs[2] = $15 which covered days 1, 2, ..., 30.
+On day 31, you bought a 1-day pass for costs[0] = $2 which covered day 31.
+In total, you spent $17 and covered all the days of your travel.
+ 
+
+**Constraints:**
+
+1 <= days.length <= 365
+1 <= days[i] <= 365
+days is in strictly increasing order.
+costs.length == 3
+1 <= costs[i] <= 1000
+"""
+class Solution:
+    def mincostTickets(self, days: List[int], costs: List[int]) -> int:
+        
